@@ -1,0 +1,47 @@
+2026-11-15 07:36:22.871 +08:00 [INF] 已读取数据库更新脚本 E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService\bin\Debug\net9.0\App_Data\update.sql（UTF-8(BOM)，88479 字符，54 个批），开始执行
+2026-11-15 07:36:26.771 +08:00 [INF] 数据库更新脚本执行完成：54/54 个批，耗时 3847 ms
+2026-11-15 07:36:26.799 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-15 07:36:26.974 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-15 07:36:26.974 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-15 07:36:26.974 +08:00 [INF] Hosting environment: Development
+2026-11-15 07:36:26.974 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-15 07:41:10.060 +08:00 [INF] 已读取数据库更新脚本 E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService\bin\Debug\net9.0\App_Data\update.sql（UTF-8(BOM)，88479 字符，54 个批），开始执行
+2026-11-15 07:41:13.405 +08:00 [INF] 数据库更新脚本执行完成：54/54 个批，耗时 3303 ms
+2026-11-15 07:41:13.433 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-15 07:41:13.566 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-15 07:41:13.567 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-15 07:41:13.567 +08:00 [INF] Hosting environment: Development
+2026-11-15 07:41:13.567 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-15 07:46:57.172 +08:00 [INF] 已读取数据库更新脚本 E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService\bin\Debug\net9.0\App_Data\update.sql（UTF-8(BOM)，88479 字符，54 个批），开始执行
+2026-11-15 07:47:01.259 +08:00 [INF] 数据库更新脚本执行完成：54/54 个批，耗时 4045 ms
+2026-11-15 07:47:01.681 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-15 07:47:02.041 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-15 07:47:02.041 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-15 07:47:02.041 +08:00 [INF] Hosting environment: Development
+2026-11-15 07:47:02.041 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-15 07:47:34.202 +08:00 [INF] 已读取数据库更新脚本 E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService\bin\Debug\net9.0\App_Data\update.sql（UTF-8(BOM)，88479 字符，54 个批），开始执行
+2026-11-15 07:47:37.440 +08:00 [INF] 数据库更新脚本执行完成：54/54 个批，耗时 3200 ms
+2026-11-15 07:47:37.460 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-15 07:47:37.572 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-15 07:47:37.572 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-15 07:47:37.572 +08:00 [INF] Hosting environment: Development
+2026-11-15 07:47:37.572 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-15 07:47:58.731 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - null null
+2026-11-15 07:47:58.808 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-15 07:47:58.841 +08:00 [INF] Route matched with {action = "ServiceInfo", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ServiceInfo() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-15 07:48:01.560 +08:00 [INF] Executed DbCommand (64ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-15 07:48:01.619 +08:00 [INF] Executed DbCommand (42ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-15 07:48:01.662 +08:00 [INF] Executed DbCommand (42ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-15 07:48:01.670 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType54`4[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-15 07:48:01.707 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService) in 2863.641ms
+2026-11-15 07:48:01.708 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-15 07:48:01.717 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - 200 null application/json; charset=utf-8 2987.791ms

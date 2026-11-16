@@ -1,0 +1,836 @@
+2026-11-14 13:17:11.906 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:17:12.023 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:17:12.025 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:17:12.026 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:17:12.026 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:17:25.962 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - null null
+2026-11-14 13:17:26.035 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-14 13:17:26.062 +08:00 [INF] Route matched with {action = "ServiceInfo", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ServiceInfo() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:17:29.274 +08:00 [INF] Executed DbCommand (69ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:17:29.336 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:17:29.381 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:17:29.388 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType54`4[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:17:29.422 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService) in 3356.457ms
+2026-11-14 13:17:29.424 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-14 13:17:29.432 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - 200 null application/json; charset=utf-8 3471.9449ms
+2026-11-14 13:18:17.474 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:18:17.599 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:18:17.601 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:18:17.601 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:18:17.601 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:18:33.745 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/repasts - null null
+2026-11-14 13:18:34.020 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Repasts (PsnMgrService)'
+2026-11-14 13:18:34.038 +08:00 [INF] Route matched with {action = "Repasts", controller = "MobileCanteen"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Repasts() on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:18:36.598 +08:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[Repast_No], [d].[Bgn_Time], [d].[Can_Order], [d].[End_Time], [d].[Order_Days]
+FROM [DC_Repast] AS [d]
+2026-11-14 13:18:36.668 +08:00 [INF] Executed DbCommand (47ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Repast_No], [s].[Bgn_Time], [s].[End_Time], [s].[Price], [s].[Remark], [s].[Repast_Name], [s].[limit_funds], [s].[limit_times], [s].[second_price]
+FROM [SF_Repast] AS [s]
+2026-11-14 13:18:36.681 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType41`12[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:18:36.731 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.Repasts (PsnMgrService) in 2689.8662ms
+2026-11-14 13:18:36.732 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Repasts (PsnMgrService)'
+2026-11-14 13:18:36.740 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/repasts - 200 null application/json; charset=utf-8 2995.627ms
+2026-11-14 13:18:36.827 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/feedback/list - null null
+2026-11-14 13:18:36.832 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFeedbackController.List (PsnMgrService)'
+2026-11-14 13:18:36.839 +08:00 [INF] Route matched with {action = "List", controller = "MobileFeedback"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult List(Int32, Int32) on controller PsnMgrService.Controllers.MicroApi.MobileFeedbackController (PsnMgrService).
+2026-11-14 13:18:36.955 +08:00 [INF] Executed DbCommand (62ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT * FROM (
+    SELECT ID_KEY, Ticket_No, Feed_Type, Content, Contact, Image_Count, CAST(Status AS int) AS Status,
+           Reply_Content, Reply_Time, Create_Time,
+           ROW_NUMBER() OVER (ORDER BY Create_Time DESC) AS RowNum
+    FROM WX_Feedback
+    WHERE Person_ID = @p0
+) T
+WHERE T.RowNum BETWEEN @p1 AND @p2
+ORDER BY T.Create_Time DESC
+2026-11-14 13:18:36.958 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType56`11[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:18:36.961 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFeedbackController.List (PsnMgrService) in 121.6252ms
+2026-11-14 13:18:36.961 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFeedbackController.List (PsnMgrService)'
+2026-11-14 13:18:36.961 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/feedback/list - 200 null application/json; charset=utf-8 133.4712ms
+2026-11-14 13:18:37.163 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/persons?keyword=%E5%BC%A0 - null null
+2026-11-14 13:18:37.166 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Persons (PsnMgrService)'
+2026-11-14 13:18:37.168 +08:00 [INF] Route matched with {action = "Persons", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Persons(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:18:37.351 +08:00 [INF] Executed DbCommand (75ms) [Parameters=[@__p_1='?' (DbType = Int32), @__kw_0_contains='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@__p_1) [s].[Person_ID], [s].[Person_No], [s].[Person_Name], [s].[Dept_ID]
+FROM [ST_Person] AS [s]
+WHERE [s].[Is_Del] = CAST(0 AS bit) AND ([s].[Person_Name] LIKE @__kw_0_contains ESCAPE '\' OR [s].[Person_No] LIKE @__kw_0_contains ESCAPE '\')
+ORDER BY [s].[Person_No]
+2026-11-14 13:18:37.406 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Dept_ID], [s].[Add_Col1], [s].[Add_Col2], [s].[Create_Time], [s].[Dept_Chief], [s].[Dept_Duty], [s].[Dept_Name], [s].[Dept_No], [s].[Dept_Sort], [s].[Dept_Telphone], [s].[Dept_Total], [s].[Is_Del], [s].[Remark]
+FROM [ST_Department] AS [s]
+2026-11-14 13:18:37.452 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType63`4[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:18:37.454 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Persons (PsnMgrService) in 286.718ms
+2026-11-14 13:18:37.455 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Persons (PsnMgrService)'
+2026-11-14 13:18:37.455 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/persons?keyword=%E5%BC%A0 - 200 null application/json; charset=utf-8 291.3303ms
+2026-11-14 13:18:37.626 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/cards - null null
+2026-11-14 13:18:37.628 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService)'
+2026-11-14 13:18:37.629 +08:00 [INF] Route matched with {action = "Cards", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Cards() on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:18:37.754 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType66`2[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.List`1[[<>f__AnonymousType67`5[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:37.755 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService) in 126.2376ms
+2026-11-14 13:18:37.756 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService)'
+2026-11-14 13:18:37.756 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/cards - 200 null application/json; charset=utf-8 129.6828ms
+2026-11-14 13:18:37.932 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/photo?applyNo=VIS20261110114623567 - null null
+2026-11-14 13:18:37.932 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Photo (PsnMgrService)'
+2026-11-14 13:18:37.934 +08:00 [INF] Route matched with {action = "Photo", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Photo(System.String, System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:18:38.007 +08:00 [INF] Executed DbCommand (61ms) [Parameters=[@__applyNo_0='?' (Size = 50) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[Apply_No] = @__applyNo_0
+2026-11-14 13:18:38.064 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[@__id_0='?' (Size = 30) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[CreateTime], [v].[ID_Type], [v].[Is_Up], [v].[OpenID], [v].[PhoneNumber], [v].[VisitorID_number], [v].[VisitorPhoto], [v].[VisitorPhotoUrl], [v].[Visitor_Company], [v].[Visitor_Name], [v].[syn_time], [v].[update_time]
+FROM [VisitorUser] AS [v]
+WHERE [v].[VisitorID_number] = @__id_0
+2026-11-14 13:18:38.066 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType64`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:38.067 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Photo (PsnMgrService) in 133.1654ms
+2026-11-14 13:18:38.067 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Photo (PsnMgrService)'
+2026-11-14 13:18:38.067 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/photo?applyNo=VIS20261110114623567 - 200 null application/json; charset=utf-8 135.2003ms
+2026-11-14 13:18:38.258 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=4 - null null
+2026-11-14 13:18:38.258 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:18:38.260 +08:00 [INF] Route matched with {action = "QrCode", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QrCode(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:18:38.319 +08:00 [INF] Executed DbCommand (50ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:18:38.439 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType49`3[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:38.441 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService) in 181.1618ms
+2026-11-14 13:18:38.441 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:18:38.441 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=4 - 200 null application/json; charset=utf-8 183.493ms
+2026-11-14 13:18:38.619 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/scancode/payment - null null
+2026-11-14 13:18:38.620 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.PaymentCode (PsnMgrService)'
+2026-11-14 13:18:38.621 +08:00 [INF] Route matched with {action = "PaymentCode", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult PaymentCode() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:18:38.679 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:18:38.787 +08:00 [INF] Executed DbCommand (54ms) [Parameters=[@__Pid_0='?' (DbType = Int32), @__cutoff_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[ID_Key], [s].[Consume_Mode], [s].[Consume_TimeLen], [s].[Get_Time], [s].[Moc_No], [s].[Person_ID], [s].[Person_No], [s].[QR_Code], [s].[QR_Fund], [s].[QR_Fund_Free], [s].[Remark], [s].[State], [s].[Unit], [s].[Unit_Number], [s].[Unit_Price], [s].[moc_read_time], [s].[open_id], [s].[pay_state], [s].[pay_type], [s].[soruce_id_key]
+FROM [SK_ScanCode] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0 AND [s].[Get_Time] < @__cutoff_1
+2026-11-14 13:18:38.965 +08:00 [INF] Executed DbCommand (52ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Double), @p2='?' (DbType = DateTime), @p3='?' (Size = 8) (DbType = AnsiString), @p4='?' (DbType = Int32), @p5='?' (Size = 32) (DbType = AnsiString), @p6='?' (Size = 256) (DbType = AnsiString), @p7='?' (DbType = Currency), @p8='?' (DbType = Currency), @p9='?' (Size = 20) (DbType = AnsiString), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Currency), @p14='?' (DbType = DateTime), @p15='?' (Size = 100) (DbType = AnsiString), @p16='?' (DbType = Int32), @p17='?' (DbType = Int64)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [SK_ScanCode] ([Consume_Mode], [Consume_TimeLen], [Get_Time], [Moc_No], [Person_ID], [Person_No], [QR_Code], [QR_Fund], [QR_Fund_Free], [Remark], [State], [Unit], [Unit_Number], [Unit_Price], [moc_read_time], [open_id], [pay_type], [soruce_id_key])
+OUTPUT INSERTED.[ID_Key], INSERTED.[pay_state]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2026-11-14 13:18:38.981 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType48`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:38.982 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.PaymentCode (PsnMgrService) in 361.1085ms
+2026-11-14 13:18:38.982 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.PaymentCode (PsnMgrService)'
+2026-11-14 13:18:38.982 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/scancode/payment - 200 null application/json; charset=utf-8 363.088ms
+2026-11-14 13:18:39.178 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/scancode/pass - null null
+2026-11-14 13:18:39.179 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.PassCode (PsnMgrService)'
+2026-11-14 13:18:39.181 +08:00 [INF] Route matched with {action = "PassCode", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult PassCode() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:18:39.231 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:18:39.287 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Card_Balance], [s].[Card_Charge], [s].[Card_Foregift], [s].[Card_NewDate], [s].[Card_Password], [s].[Card_SmallBalance], [s].[Card_State], [s].[Card_ValidDate], [s].[IC_Balance], [s].[Remark], [s].[Subsidy_Flag], [s].[Subsidy_Fund], [s].[Type_No], [s].[Update_Time], [s].[User_No]
+FROM [ST_Card] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:18:39.335 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType50`3[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:39.336 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.PassCode (PsnMgrService) in 155.5881ms
+2026-11-14 13:18:39.337 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.PassCode (PsnMgrService)'
+2026-11-14 13:18:39.337 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/scancode/pass - 200 null application/json; charset=utf-8 159.2088ms
+2026-11-14 13:18:39.555 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/face/photo - null null
+2026-11-14 13:18:39.556 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.FacePhoto (PsnMgrService)'
+2026-11-14 13:18:39.557 +08:00 [INF] Route matched with {action = "FacePhoto", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult FacePhoto() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:18:39.618 +08:00 [INF] Executed DbCommand (53ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Photo], [s].[id_photo], [s].[img_qr_code], [s].[update_time]
+FROM [ST_PersonPhoto] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:18:39.620 +08:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2026-11-14 13:18:39.636 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.FacePhoto (PsnMgrService) in 78.8768ms
+2026-11-14 13:18:39.636 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.FacePhoto (PsnMgrService)'
+2026-11-14 13:18:39.636 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/face/photo - 404 null application/problem+json; charset=utf-8 81.0187ms
+2026-11-14 13:18:39.828 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/face/status - null null
+2026-11-14 13:18:39.829 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.FaceStatus (PsnMgrService)'
+2026-11-14 13:18:39.830 +08:00 [INF] Route matched with {action = "FaceStatus", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult FaceStatus() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:18:39.877 +08:00 [INF] Executed DbCommand (44ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Photo], [s].[id_photo], [s].[img_qr_code], [s].[update_time]
+FROM [ST_PersonPhoto] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:18:39.877 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType53`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:39.879 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.FaceStatus (PsnMgrService) in 48.4768ms
+2026-11-14 13:18:39.879 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.FaceStatus (PsnMgrService)'
+2026-11-14 13:18:39.879 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/face/status - 200 null application/json; charset=utf-8 51.0098ms
+2026-11-14 13:18:40.056 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/message/list - null null
+2026-11-14 13:18:40.056 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileMessageController.List (PsnMgrService)'
+2026-11-14 13:18:40.061 +08:00 [INF] Route matched with {action = "List", controller = "MobileMessage"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] List(Int32, Int32) on controller PsnMgrService.Controllers.MicroApi.MobileMessageController (PsnMgrService).
+2026-11-14 13:18:40.142 +08:00 [INF] Executed DbCommand (58ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT ID_KEY, Msg_Type, Title, Content, Is_Read, Create_Time
+FROM (
+    SELECT ID_KEY, Msg_Type, Title, Content, Is_Read, Create_Time,
+           ROW_NUMBER() OVER (ORDER BY Create_Time DESC) AS RowNum
+    FROM WX_Message
+    WHERE Person_ID = @p0
+) AS T
+WHERE T.RowNum BETWEEN @p1 AND @p2
+ORDER BY T.Create_Time DESC
+2026-11-14 13:18:40.152 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType57`6[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:18:40.154 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileMessageController.List (PsnMgrService) in 92.2656ms
+2026-11-14 13:18:40.154 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileMessageController.List (PsnMgrService)'
+2026-11-14 13:18:40.155 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/message/list - 200 null application/json; charset=utf-8 99.1824ms
+2026-11-14 13:18:40.331 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/Admin_Feedback - null null
+2026-11-14 13:18:40.331 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.Admin_FeedbackController.GetList (PsnMgrService)'
+2026-11-14 13:18:40.333 +08:00 [INF] Route matched with {action = "GetList", controller = "Admin_Feedback"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetList(System.String, System.String, System.String, System.String, Int32, Int32) on controller PsnMgrService.Controllers.Admin_FeedbackController (PsnMgrService).
+2026-11-14 13:18:40.348 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:18:40.397 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Value]
+FROM (
+    SELECT COUNT(1) AS Value FROM WX_Feedback  WHERE 1=1 
+) AS [s]
+2026-11-14 13:18:40.455 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@start='?' (DbType = Int32), @endRow='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT * FROM (
+    SELECT ID_KEY, Ticket_No, Person_ID, Person_No, Person_Name, Card_No, Feed_Type, Content, Contact,
+           Image_Count, CAST(Status AS int) AS Status, Reply_Content, Reply_User, Reply_Time, Source, Create_Time,
+           ROW_NUMBER() OVER (ORDER BY Create_Time DESC) AS RowNum
+    FROM WX_Feedback  WHERE 1=1 
+) T
+WHERE T.RowNum BETWEEN @start AND @endRow
+ORDER BY T.Create_Time DESC
+2026-11-14 13:18:40.455 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`4[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.List`1[[<>f__AnonymousType1`17[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:18:40.458 +08:00 [INF] Executed action PsnMgrService.Controllers.Admin_FeedbackController.GetList (PsnMgrService) in 124.6362ms
+2026-11-14 13:18:40.458 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.Admin_FeedbackController.GetList (PsnMgrService)'
+2026-11-14 13:18:40.458 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/Admin_Feedback - 200 null application/json; charset=utf-8 127.4187ms
+2026-11-14 13:18:40.696 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/Admin_Feedback/image?ticketNo=X&seq=1 - null null
+2026-11-14 13:18:40.697 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.Admin_FeedbackController.GetImage (PsnMgrService)'
+2026-11-14 13:18:40.699 +08:00 [INF] Route matched with {action = "GetImage", controller = "Admin_Feedback"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetImage(System.String, Int32) on controller PsnMgrService.Controllers.Admin_FeedbackController (PsnMgrService).
+2026-11-14 13:18:40.775 +08:00 [INF] Executed DbCommand (63ms) [Parameters=[@p0='?' (Size = 1), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT Content_Type, Photo FROM WX_FeedbackImage
+WHERE Ticket_No = @p0 AND Seq = @p1
+2026-11-14 13:18:40.775 +08:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2026-11-14 13:18:40.776 +08:00 [INF] Executed action PsnMgrService.Controllers.Admin_FeedbackController.GetImage (PsnMgrService) in 76.6656ms
+2026-11-14 13:18:40.776 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.Admin_FeedbackController.GetImage (PsnMgrService)'
+2026-11-14 13:18:40.776 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/Admin_Feedback/image?ticketNo=X&seq=1 - 404 null application/problem+json; charset=utf-8 79.5223ms
+2026-11-14 13:18:55.099 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:18:55.227 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:18:55.231 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:18:55.231 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:18:55.231 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:19:12.021 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/ordermode - null null
+2026-11-14 13:19:12.324 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.OrderModeInfo (PsnMgrService)'
+2026-11-14 13:19:12.346 +08:00 [INF] Route matched with {action = "OrderModeInfo", controller = "MobileCanteen"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult OrderModeInfo() on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:19:17.280 +08:00 [INF] Executed DbCommand (54ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:19:17.306 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType47`5[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:19:17.354 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.OrderModeInfo (PsnMgrService) in 5005.7794ms
+2026-11-14 13:19:17.357 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.OrderModeInfo (PsnMgrService)'
+2026-11-14 13:19:17.369 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/ordermode - 200 null application/json; charset=utf-8 5349.632ms
+2026-11-14 13:19:17.586 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/auth/profile - null null
+2026-11-14 13:19:17.591 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileAuthController.Profile (PsnMgrService)'
+2026-11-14 13:19:17.604 +08:00 [INF] Route matched with {action = "Profile", controller = "MobileAuth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Profile() on controller PsnMgrService.Controllers.MicroApi.MobileAuthController (PsnMgrService).
+2026-11-14 13:19:17.808 +08:00 [INF] Executed DbCommand (71ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:19:17.980 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Card_Balance], [s].[Card_Charge], [s].[Card_Foregift], [s].[Card_NewDate], [s].[Card_Password], [s].[Card_SmallBalance], [s].[Card_State], [s].[Card_ValidDate], [s].[IC_Balance], [s].[Remark], [s].[Subsidy_Flag], [s].[Subsidy_Fund], [s].[Type_No], [s].[Update_Time], [s].[User_No]
+FROM [ST_Card] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:19:18.106 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[@__deptId_Value_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Dept_ID], [s].[Add_Col1], [s].[Add_Col2], [s].[Create_Time], [s].[Dept_Chief], [s].[Dept_Duty], [s].[Dept_Name], [s].[Dept_No], [s].[Dept_Sort], [s].[Dept_Telphone], [s].[Dept_Total], [s].[Is_Del], [s].[Remark]
+FROM [ST_Department] AS [s]
+WHERE [s].[Dept_ID] = @__deptId_Value_0 AND COALESCE([s].[Is_Del], CAST(0 AS bit)) = CAST(0 AS bit)
+2026-11-14 13:19:18.112 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType37`15[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:19:18.138 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileAuthController.Profile (PsnMgrService) in 534.0291ms
+2026-11-14 13:19:18.139 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileAuthController.Profile (PsnMgrService)'
+2026-11-14 13:19:18.140 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/auth/profile - 200 null application/json; charset=utf-8 554.9737ms
+2026-11-14 13:19:18.334 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/menu?week=7&repastNo=001&areaNo=SF01&date=2026-11-15 - null null
+2026-11-14 13:19:18.341 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Menu (PsnMgrService)'
+2026-11-14 13:19:18.352 +08:00 [INF] Route matched with {action = "Menu", controller = "MobileCanteen"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Menu(Int32, System.String, System.String, System.String) on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:19:18.470 +08:00 [WRN] No store type was specified for the decimal property 'Ware_Price' on entity type 'MenuRow'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-11-14 13:19:18.557 +08:00 [INF] Executed DbCommand (71ms) [Parameters=[@week='?' (DbType = Int32), @repastNo='?' (Size = 3), @areaNo='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT i.Ware_ID AS Ware_ID, i.Ware_Name AS Ware_Name, i.Ware_Price AS Ware_Price, i.Ware_Unit AS Ware_Unit,
+       t.Type_Name AS Type_Name, w.Remark AS Remark, w.Order_Copies AS Order_Copies,
+       CAST(CASE WHEN EXISTS(SELECT 1 FROM XF_WareInfoPhoto ph WHERE ph.Ware_ID = i.Ware_ID) THEN 1 ELSE 0 END AS bit) AS HasPhoto
+FROM XF_WareInWeek w
+JOIN XF_WareInfo i ON i.Ware_ID = w.Ware_ID
+LEFT JOIN XF_WareType t ON t.Type_No = i.Ware_Type
+WHERE w.Ware_Week = @week AND w.Repast_No = @repastNo
+  AND (@areaNo = '' OR ISNULL(w.Area_No, '') = @areaNo)
+2026-11-14 13:19:18.607 +08:00 [INF] Executed DbCommand (43ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:19:18.662 +08:00 [INF] Executed DbCommand (47ms) [Parameters=[@repastNo='?' (Size = 3), @today='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT s.Ware_ID AS Ware_ID, ISNULL(m.Order_Date,'') AS Order_Date, SUM(s.Ware_Copies) AS Copies
+FROM DC_OrderDataSub s
+JOIN DC_OrderData m ON m.Order_No = s.Order_No
+WHERE ISNULL(m.Repast_No,'') = @repastNo AND m.Order_Date >= @today
+GROUP BY s.Ware_ID, ISNULL(m.Order_Date,'')
+2026-11-14 13:19:18.719 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[@__repastNo_0='?' (Size = 3) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [d].[Repast_No], [d].[Bgn_Time], [d].[Can_Order], [d].[End_Time], [d].[Order_Days]
+FROM [DC_Repast] AS [d]
+WHERE [d].[Repast_No] = @__repastNo_0
+2026-11-14 13:19:18.724 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType42`12[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:19:18.736 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.Menu (PsnMgrService) in 384.324ms
+2026-11-14 13:19:18.736 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Menu (PsnMgrService)'
+2026-11-14 13:19:18.737 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/menu?week=7&repastNo=001&areaNo=SF01&date=2026-11-15 - 200 null application/json; charset=utf-8 402.0448ms
+2026-11-14 13:21:57.820 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:21:57.974 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:21:57.976 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:21:57.977 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:21:57.977 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:22:13.713 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - null null
+2026-11-14 13:22:13.786 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-14 13:22:13.809 +08:00 [INF] Route matched with {action = "ServiceInfo", controller = "MobileFace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ServiceInfo() on controller PsnMgrService.Controllers.MicroApi.MobileFaceController (PsnMgrService).
+2026-11-14 13:22:25.039 +08:00 [INF] Executed DbCommand (114ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:22:25.120 +08:00 [INF] Executed DbCommand (60ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:22:25.168 +08:00 [INF] Executed DbCommand (48ms) [Parameters=[@__code_0='?' (Size = 20) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = @__code_0
+2026-11-14 13:22:25.178 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType54`4[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:22:25.219 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService) in 11406.5408ms
+2026-11-14 13:22:25.221 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileFaceController.ServiceInfo (PsnMgrService)'
+2026-11-14 13:22:25.232 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/service/info - 200 null application/json; charset=utf-8 11519.5769ms
+2026-11-14 13:23:29.221 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:23:29.348 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:23:29.350 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:23:29.351 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:23:29.351 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:23:47.579 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/canteen/order - application/json 138
+2026-11-14 13:23:47.857 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Order (PsnMgrService)'
+2026-11-14 13:23:47.872 +08:00 [INF] Route matched with {action = "Order", controller = "MobileCanteen"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Order(PsnMgrService.Controllers.MicroApi.OrderReq) on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:23:50.433 +08:00 [INF] Executed DbCommand (67ms) [Parameters=[@__req_repastNo_0='?' (Size = 3) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [d].[Repast_No], [d].[Bgn_Time], [d].[Can_Order], [d].[End_Time], [d].[Order_Days]
+FROM [DC_Repast] AS [d]
+WHERE [d].[Repast_No] = @__req_repastNo_0
+2026-11-14 13:23:50.530 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:23:50.662 +08:00 [INF] Executed DbCommand (60ms) [Parameters=[@repastNo='?' (Size = 3), @today='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT s.Ware_ID AS Ware_ID, ISNULL(m.Order_Date,'') AS Order_Date, SUM(s.Ware_Copies) AS Copies
+FROM DC_OrderDataSub s
+JOIN DC_OrderData m ON m.Order_No = s.Order_No
+WHERE ISNULL(m.Repast_No,'') = @repastNo AND m.Order_Date >= @today
+GROUP BY s.Ware_ID, ISNULL(m.Order_Date,'')
+2026-11-14 13:23:50.724 +08:00 [INF] Executed DbCommand (54ms) [Parameters=[@wareId='?' (DbType = Int32), @week='?' (DbType = Int32), @repastNo='?' (Size = 3), @areaNo='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT ISNULL(w.Order_Copies, 0) AS Order_Copies
+FROM XF_WareInWeek w
+WHERE w.Ware_ID = @wareId AND w.Ware_Week = @week AND ISNULL(w.Repast_No,'') = @repastNo
+  AND (@areaNo = '' OR ISNULL(w.Area_No,'') = @areaNo)
+2026-11-14 13:23:50.771 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@wareId='?' (DbType = Int32), @week='?' (DbType = Int32), @repastNo='?' (Size = 3), @areaNo='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT ISNULL(w.Order_Copies, 0) AS Order_Copies
+FROM XF_WareInWeek w
+WHERE w.Ware_ID = @wareId AND w.Ware_Week = @week AND ISNULL(w.Repast_No,'') = @repastNo
+  AND (@areaNo = '' OR ISNULL(w.Area_No,'') = @areaNo)
+2026-11-14 13:23:50.828 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:23:51.011 +08:00 [INF] Executed DbCommand (48ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Card_Balance], [s].[Card_Charge], [s].[Card_Foregift], [s].[Card_NewDate], [s].[Card_Password], [s].[Card_SmallBalance], [s].[Card_State], [s].[Card_ValidDate], [s].[IC_Balance], [s].[Remark], [s].[Subsidy_Flag], [s].[Subsidy_Fund], [s].[Type_No], [s].[Update_Time], [s].[User_No]
+FROM [ST_Card] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:23:51.348 +08:00 [INF] Executed DbCommand (237ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:23:51.857 +08:00 [INF] Executed DbCommand (179ms) [Parameters=[@p0='?' (DbType = DateTime), @p1='?' (Size = 1) (DbType = Byte), @p2='?' (Size = 256) (DbType = AnsiString), @p3='?' (DbType = DateTime), @p4='?' (DbType = Boolean), @p5='?' (Size = 6) (DbType = AnsiString), @p6='?' (Size = 6) (DbType = AnsiString), @p7='?' (DbType = Currency), @p8='?' (Size = 10) (DbType = AnsiString), @p9='?' (DbType = Currency), @p10='?' (Size = 60) (DbType = AnsiString), @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (Size = 40) (DbType = AnsiString), @p14='?' (Size = 3) (DbType = AnsiString), @p15='?' (Size = 256) (DbType = AnsiString), @p16='?' (Size = 36) (DbType = AnsiString), @p17='?' (DbType = Int32), @p18='?' (Size = 60) (DbType = AnsiString), @p19='?' (Size = 40) (DbType = AnsiString), @p20='?' (DbType = Currency), @p21='?' (DbType = Int32), @p22='?' (DbType = Currency), @p23='?' (DbType = Int32), @p24='?' (DbType = Currency), @p25='?' (Size = 256) (DbType = AnsiString), @p26='?' (Size = 60) (DbType = AnsiString), @p27='?' (Size = 40) (DbType = AnsiString), @p28='?' (DbType = Currency), @p29='?' (DbType = Int32), @p30='?' (DbType = Currency), @p31='?' (DbType = Int32), @p32='?' (DbType = Currency), @p33='?' (Size = 256) (DbType = AnsiString), @p36='?' (DbType = Int32), @p34='?' (DbType = Currency), @p35='?' (DbType = DateTime), @p37='?' (Size = 800) (DbType = AnsiString), @p38='?' (DbType = Currency), @p39='?' (Size = 50) (DbType = AnsiString), @p40='?' (DbType = Currency), @p41='?' (DbType = Currency), @p42='?' (DbType = Int32), @p43='?' (DbType = DateTime), @p44='?' (Size = 1) (DbType = Byte), @p45='?' (DbType = DateTime), @p46='?' (Size = 6) (DbType = AnsiString), @p47='?' (Size = 30) (DbType = AnsiString), @p48='?' (DbType = Int32), @p49='?' (Size = 20) (DbType = AnsiString), @p50='?' (Size = 3) (DbType = AnsiString), @p51='?' (Size = 10) (DbType = AnsiString), @p52='?' (DbType = Int32), @p53='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [DC_OrderData] ([Consume_Time], [Data_Type], [Delivery_Addr], [Download_Time], [Is_WareOrder], [Moc_No_DC], [Moc_No_SF], [Order_BeforeFund], [Order_Date], [Order_Fund], [Order_No], [Order_Time], [Person_ID], [Remark], [Repast_No], [Taste], [Telephone], [copies])
+OUTPUT INSERTED.[ID_KEY]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+MERGE [DC_OrderDataSub] USING (
+VALUES (@p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, 0),
+(@p26, @p27, @p28, @p29, @p30, @p31, @p32, @p33, 1)) AS i ([Order_No], [Remark], [Ware_BeforeFund], [Ware_Copies], [Ware_Fund], [Ware_ID], [Ware_Price], [Ware_Taste], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Order_No], [Remark], [Ware_BeforeFund], [Ware_Copies], [Ware_Fund], [Ware_ID], [Ware_Price], [Ware_Taste])
+VALUES (i.[Order_No], i.[Remark], i.[Ware_BeforeFund], i.[Ware_Copies], i.[Ware_Fund], i.[Ware_ID], i.[Ware_Price], i.[Ware_Taste])
+OUTPUT INSERTED.[ID_KEY], i._Position;
+UPDATE [ST_Card] SET [Card_Balance] = @p34, [Update_Time] = @p35
+WHERE [Person_ID] = @p36;
+SELECT @@ROWCOUNT;
+
+INSERT INTO [XF_Consume] ([BarCode], [Before_Fund], [COM_No], [Card_Balance], [Consume_Fund], [Consume_Mode], [Consume_Time], [Data_Type], [Download_Time], [MOC_No], [OrderID], [Person_ID], [Remark], [Repast_No], [System_No], [Ware_ID], [wx_syn_time])
+OUTPUT INSERTED.[ID_KEY], INSERTED.[Card_SmallAccount], INSERTED.[Consume_Capacity], INSERTED.[Consume_Copy], INSERTED.[Consume_TimeLen], INSERTED.[DB_Balance]
+VALUES (@p37, @p38, @p39, @p40, @p41, @p42, @p43, @p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53);
+2026-11-14 13:23:52.077 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType45`4[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:23:52.105 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.Order (PsnMgrService) in 4230.9355ms
+2026-11-14 13:23:52.106 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.Order (PsnMgrService)'
+2026-11-14 13:23:52.113 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/canteen/order - 200 null application/json; charset=utf-8 4535.6551ms
+2026-11-14 13:23:53.978 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/myorders - null null
+2026-11-14 13:23:53.986 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.MyOrders (PsnMgrService)'
+2026-11-14 13:23:53.997 +08:00 [INF] Route matched with {action = "MyOrders", controller = "MobileCanteen"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MyOrders(System.String, System.String, Boolean) on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:23:54.066 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:23:54.135 +08:00 [INF] Executed DbCommand (62ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Repast_No], [s].[Bgn_Time], [s].[End_Time], [s].[Price], [s].[Remark], [s].[Repast_Name], [s].[limit_funds], [s].[limit_times], [s].[second_price]
+FROM [SF_Repast] AS [s]
+2026-11-14 13:23:54.192 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [x].[Ware_ID], [x].[System_No], [x].[Remark], [x].[Ware_Bar_Code], [x].[Ware_Discount], [x].[Ware_Name], [x].[Ware_No], [x].[Ware_PY], [x].[Ware_Price], [x].[Ware_Type], [x].[Ware_Unit]
+FROM [XF_WareInfo] AS [x]
+2026-11-14 13:23:54.253 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[ID_KEY], [d].[Consume_Time], [d].[Data_Type], [d].[Delivery_Addr], [d].[Download_Time], [d].[Is_WareOrder], [d].[Moc_No_DC], [d].[Moc_No_SF], [d].[Order_BeforeFund], [d].[Order_Date], [d].[Order_Fund], [d].[Order_No], [d].[Order_Time], [d].[Person_ID], [d].[Remark], [d].[Repast_No], [d].[Taste], [d].[Telephone], [d].[copies]
+FROM [DC_OrderData] AS [d]
+WHERE [d].[Person_ID] = @__Pid_0
+ORDER BY [d].[Order_Time] DESC
+2026-11-14 13:23:54.431 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:23:54.497 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.MyOrders (PsnMgrService) in 499.9355ms
+2026-11-14 13:23:54.498 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.MyOrders (PsnMgrService)'
+2026-11-14 13:23:54.499 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/canteen/myorders - 200 null application/json; charset=utf-8 521.0663ms
+2026-11-14 13:23:54.618 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/canteen/cancel - application/json 35
+2026-11-14 13:23:54.625 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.CancelOrder (PsnMgrService)'
+2026-11-14 13:23:54.627 +08:00 [INF] Route matched with {action = "CancelOrder", controller = "MobileCanteen"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CancelOrder(PsnMgrService.Controllers.MicroApi.CancelOrderReq) on controller PsnMgrService.Controllers.MicroApi.MobileCanteenController (PsnMgrService).
+2026-11-14 13:23:54.943 +08:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Param_Value]
+FROM [ST_SysParam] AS [s]
+WHERE [s].[Param_Code] = 'DC.Solution'
+2026-11-14 13:23:55.002 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__Pid_0='?' (DbType = Int32), @__req_orderNo_1='?' (Size = 60) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [d].[ID_KEY], [d].[Consume_Time], [d].[Data_Type], [d].[Delivery_Addr], [d].[Download_Time], [d].[Is_WareOrder], [d].[Moc_No_DC], [d].[Moc_No_SF], [d].[Order_BeforeFund], [d].[Order_Date], [d].[Order_Fund], [d].[Order_No], [d].[Order_Time], [d].[Person_ID], [d].[Remark], [d].[Repast_No], [d].[Taste], [d].[Telephone], [d].[copies]
+FROM [DC_OrderData] AS [d]
+WHERE [d].[Person_ID] = @__Pid_0 AND [d].[Order_No] = @__req_orderNo_1
+2026-11-14 13:23:55.053 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__repastNo_0='?' (Size = 3) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [d].[Repast_No], [d].[Bgn_Time], [d].[Can_Order], [d].[End_Time], [d].[Order_Days]
+FROM [DC_Repast] AS [d]
+WHERE [d].[Repast_No] = @__repastNo_0
+2026-11-14 13:23:55.099 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Card_Balance], [s].[Card_Charge], [s].[Card_Foregift], [s].[Card_NewDate], [s].[Card_Password], [s].[Card_SmallBalance], [s].[Card_State], [s].[Card_ValidDate], [s].[IC_Balance], [s].[Remark], [s].[Subsidy_Flag], [s].[Subsidy_Fund], [s].[Type_No], [s].[Update_Time], [s].[User_No]
+FROM [ST_Card] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:23:55.158 +08:00 [INF] Executed DbCommand (54ms) [Parameters=[@__o_Order_No_0='?' (Size = 60) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[ID_KEY], [d].[Order_No], [d].[Remark], [d].[Ware_BeforeFund], [d].[Ware_Copies], [d].[Ware_Fund], [d].[Ware_ID], [d].[Ware_Price], [d].[Ware_Taste]
+FROM [DC_OrderDataSub] AS [d]
+WHERE [d].[Order_No] = @__o_Order_No_0
+2026-11-14 13:23:55.314 +08:00 [INF] Executed DbCommand (106ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p4='?' (DbType = Int32), @p3='?' (DbType = Currency), @p5='?' (Size = 800) (DbType = AnsiString), @p6='?' (DbType = Currency), @p7='?' (Size = 50) (DbType = AnsiString), @p8='?' (DbType = Currency), @p9='?' (DbType = Currency), @p10='?' (DbType = Int32), @p11='?' (DbType = DateTime), @p12='?' (Size = 1) (DbType = Byte), @p13='?' (DbType = DateTime), @p14='?' (Size = 6) (DbType = AnsiString), @p15='?' (Size = 30) (DbType = AnsiString), @p16='?' (DbType = Int32), @p17='?' (Size = 20) (DbType = AnsiString), @p18='?' (Size = 3) (DbType = AnsiString), @p19='?' (Size = 10) (DbType = AnsiString), @p20='?' (DbType = Int32), @p21='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [DC_OrderData]
+OUTPUT 1
+WHERE [ID_KEY] = @p0;
+DELETE FROM [DC_OrderDataSub]
+OUTPUT 1
+WHERE [ID_KEY] = @p1;
+DELETE FROM [DC_OrderDataSub]
+OUTPUT 1
+WHERE [ID_KEY] = @p2;
+UPDATE [ST_Card] SET [Card_Balance] = @p3
+WHERE [Person_ID] = @p4;
+SELECT @@ROWCOUNT;
+
+INSERT INTO [XF_Consume] ([BarCode], [Before_Fund], [COM_No], [Card_Balance], [Consume_Fund], [Consume_Mode], [Consume_Time], [Data_Type], [Download_Time], [MOC_No], [OrderID], [Person_ID], [Remark], [Repast_No], [System_No], [Ware_ID], [wx_syn_time])
+OUTPUT INSERTED.[ID_KEY], INSERTED.[Card_SmallAccount], INSERTED.[Consume_Capacity], INSERTED.[Consume_Copy], INSERTED.[Consume_TimeLen], INSERTED.[DB_Balance]
+VALUES (@p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21);
+2026-11-14 13:23:55.367 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType10`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:23:55.369 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileCanteenController.CancelOrder (PsnMgrService) in 741.5138ms
+2026-11-14 13:23:55.369 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileCanteenController.CancelOrder (PsnMgrService)'
+2026-11-14 13:23:55.369 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/canteen/cancel - 200 null application/json; charset=utf-8 750.9399ms
+2026-11-14 13:24:11.560 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:24:11.683 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:24:11.685 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:24:11.685 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:24:11.685 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:24:28.187 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/cards - null null
+2026-11-14 13:24:28.434 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService)'
+2026-11-14 13:24:28.446 +08:00 [INF] Route matched with {action = "Cards", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Cards() on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:29.101 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType66`2[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.List`1[[<>f__AnonymousType67`5[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:29.148 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService) in 699.0451ms
+2026-11-14 13:24:29.157 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Cards (PsnMgrService)'
+2026-11-14 13:24:29.163 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/cards - 200 null application/json; charset=utf-8 976.59ms
+2026-11-14 13:24:29.233 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/submit - application/json 276
+2026-11-14 13:24:29.239 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService)'
+2026-11-14 13:24:29.246 +08:00 [INF] Route matched with {action = "Submit", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Submit(PsnMgrService.Controllers.MicroApi.VisitorSubmitReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:31.234 +08:00 [INF] Executed DbCommand (64ms) [Parameters=[@__respondentId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__respondentId_0 AND [s].[Is_Del] = CAST(0 AS bit)
+2026-11-14 13:24:31.332 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:24:31.388 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@p0='?' (Size = 18), @p1='?' (DbType = Int32), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Value]
+FROM (
+    SELECT COUNT(1) AS Value FROM VisitorApply
+                  WHERE VisitorID_number = @p0 AND Person_ID = @p1
+                    AND VisitOrNot IN (0,1) AND CAST(Start_Date AS date) = @p2
+) AS [s]
+2026-11-14 13:24:31.451 +08:00 [INF] Executed DbCommand (61ms) [Parameters=[@p0='?' (Size = 18), @p1='?' (Size = 5), @p2='?' (Size = 11), @p3='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT 1 FROM VisitorUser WHERE VisitorID_number = @p0)
+                  UPDATE VisitorUser
+                  SET Visitor_Name = @p1, PhoneNumber = @p2, Visitor_Company = @p3, update_time = GETDATE()
+                  WHERE VisitorID_number = @p0
+              ELSE
+                  INSERT INTO VisitorUser (VisitorID_number, ID_Type, Visitor_Name, PhoneNumber, Visitor_Company, CreateTime, update_time)
+                  VALUES (@p0, N'身份证', @p1, @p2, @p3, GETDATE(), GETDATE())
+2026-11-14 13:24:31.511 +08:00 [INF] Executed DbCommand (48ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:24:31.820 +08:00 [INF] Executed DbCommand (117ms) [Parameters=[@p0='?' (Size = 50) (DbType = AnsiString), @p1='?' (Size = 300) (DbType = AnsiString), @p2='?' (DbType = DateTime), @p3='?' (Size = 12) (DbType = AnsiString), @p4='?' (Size = 200) (DbType = AnsiString), @p5='?' (DbType = DateTime), @p6='?' (Size = 12) (DbType = AnsiString), @p7='?' (DbType = DateTime), @p8='?' (Size = 50) (DbType = AnsiString), @p9='?' (DbType = Int32), @p10='?' (Size = 20) (DbType = AnsiString), @p11='?' (DbType = DateTime), @p12='?' (Size = 200) (DbType = AnsiString), @p13='?' (DbType = Int32), @p14='?' (Size = 30) (DbType = AnsiString), @p15='?' (Size = 200) (DbType = AnsiString), @p16='?' (Size = 15) (DbType = AnsiString), @p17='?' (Size = 30) (DbType = AnsiString), @p18='?' (DbType = DateTime), @p19='?' (DbType = DateTime), @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime), @p22='?' (Size = 20) (DbType = AnsiString), @p23='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [VisitorApply] ([Apply_No], [Approved_Reason], [Approved_Time], [Approved_User], [Carry_items], [CreateTime], [Empower_Card_No], [End_Date], [OpenID], [Person_ID], [Person_Mobile], [Start_Date], [Subject_Matter], [VisitOrNot], [VisitorID_number], [Visitor_Company], [Visitor_Number], [car_number], [check_intime], [check_outtime], [syn_time], [update_time], [visitor_type], [visitors_number])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+SELECT [ID_KEY], [Is_Up]
+FROM [VisitorApply]
+WHERE @@ROWCOUNT = 1 AND [ID_KEY] = scope_identity();
+2026-11-14 13:24:31.884 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType65`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:31.890 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService) in 2644.1893ms
+2026-11-14 13:24:31.890 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService)'
+2026-11-14 13:24:31.896 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/submit - 200 null application/json; charset=utf-8 2663.5558ms
+2026-11-14 13:24:31.957 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/list - null null
+2026-11-14 13:24:31.962 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService)'
+2026-11-14 13:24:31.968 +08:00 [INF] Route matched with {action = "List", controller = "MobileVisitor"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] List(System.String, System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:32.030 +08:00 [INF] Executed DbCommand (43ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:24:32.341 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType61`26[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:24:32.346 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService) in 377.4939ms
+2026-11-14 13:24:32.346 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService)'
+2026-11-14 13:24:32.347 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/list - 200 null application/json; charset=utf-8 389.646ms
+2026-11-14 13:24:33.138 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/approve - application/json 38
+2026-11-14 13:24:33.139 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService)'
+2026-11-14 13:24:33.141 +08:00 [INF] Route matched with {action = "Approve", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Approve(PsnMgrService.Controllers.MicroApi.VisitorApproveReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:33.425 +08:00 [INF] Executed DbCommand (163ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:24:33.852 +08:00 [INF] Executed DbCommand (47ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:24:33.904 +08:00 [INF] Executed DbCommand (47ms) [Parameters=[@p6='?' (DbType = Int32), @p0='?' (Size = 300) (DbType = AnsiString), @p1='?' (DbType = DateTime), @p2='?' (Size = 12) (DbType = AnsiString), @p3='?' (Size = 12) (DbType = AnsiString), @p4='?' (DbType = Int32), @p5='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [VisitorApply] SET [Approved_Reason] = @p0, [Approved_Time] = @p1, [Approved_User] = @p2, [Empower_Card_No] = @p3, [VisitOrNot] = @p4, [update_time] = @p5
+WHERE [ID_KEY] = @p6;
+SELECT @@ROWCOUNT;
+2026-11-14 13:24:33.962 +08:00 [INF] Executed DbCommand (47ms) [Parameters=[@__idCard_0='?' (Size = 30) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[CreateTime], [v].[ID_Type], [v].[Is_Up], [v].[OpenID], [v].[PhoneNumber], [v].[VisitorID_number], [v].[VisitorPhoto], [v].[VisitorPhotoUrl], [v].[Visitor_Company], [v].[Visitor_Name], [v].[syn_time], [v].[update_time]
+FROM [VisitorUser] AS [v]
+WHERE [v].[VisitorID_number] = @__idCard_0
+2026-11-14 13:24:34.009 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType69`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:34.011 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService) in 869.7899ms
+2026-11-14 13:24:34.011 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService)'
+2026-11-14 13:24:34.011 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/approve - 200 null application/json; charset=utf-8 873.5418ms
+2026-11-14 13:24:34.565 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=10 - null null
+2026-11-14 13:24:34.566 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:24:34.567 +08:00 [INF] Route matched with {action = "QrCode", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QrCode(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:34.617 +08:00 [INF] Executed DbCommand (44ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:24:34.676 +08:00 [INF] Executed DbCommand (51ms) [Parameters=[@__v_Empower_Card_No_0='?' (Size = 12) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Card_No] = @__v_Empower_Card_No_0
+2026-11-14 13:24:34.677 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType74`6[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:34.679 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService) in 111.4338ms
+2026-11-14 13:24:34.679 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:24:34.679 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=10 - 200 null application/json; charset=utf-8 114.045ms
+2026-11-14 13:24:35.072 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/verify?token=employee;13941371;1794643200 - null null
+2026-11-14 13:24:35.072 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService)'
+2026-11-14 13:24:35.073 +08:00 [INF] Route matched with {action = "Verify", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Verify(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:35.076 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType72`2[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:35.078 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService) in 4.9409ms
+2026-11-14 13:24:35.078 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService)'
+2026-11-14 13:24:35.079 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/verify?token=employee;13941371;1794643200 - 200 null application/json; charset=utf-8 6.9878ms
+2026-11-14 13:24:35.143 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/checkin - application/json 11
+2026-11-14 13:24:35.144 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.CheckIn (PsnMgrService)'
+2026-11-14 13:24:35.145 +08:00 [INF] Route matched with {action = "CheckIn", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CheckIn(PsnMgrService.Controllers.MicroApi.VisitorApproveReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:35.194 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:24:35.249 +08:00 [INF] Executed DbCommand (53ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (DbType = DateTime), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [VisitorApply] SET [check_intime] = @p0, [update_time] = @p1
+WHERE [ID_KEY] = @p2;
+SELECT @@ROWCOUNT;
+2026-11-14 13:24:35.250 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType70`4[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:35.251 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.CheckIn (PsnMgrService) in 105.4912ms
+2026-11-14 13:24:35.251 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.CheckIn (PsnMgrService)'
+2026-11-14 13:24:35.251 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/checkin - 200 null application/json; charset=utf-8 108.0829ms
+2026-11-14 13:24:35.334 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/signout - application/json 11
+2026-11-14 13:24:35.334 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.SignOut (PsnMgrService)'
+2026-11-14 13:24:35.335 +08:00 [INF] Route matched with {action = "SignOut", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult SignOut(PsnMgrService.Controllers.MicroApi.VisitorActionReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:24:35.383 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:24:35.438 +08:00 [INF] Executed DbCommand (53ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (DbType = DateTime), @p1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [VisitorApply] SET [check_outtime] = @p0, [update_time] = @p1
+WHERE [ID_KEY] = @p2;
+SELECT @@ROWCOUNT;
+2026-11-14 13:24:35.992 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType71`2[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:24:35.993 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.SignOut (PsnMgrService) in 658.1526ms
+2026-11-14 13:24:35.994 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.SignOut (PsnMgrService)'
+2026-11-14 13:24:35.994 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/signout - 200 null application/json; charset=utf-8 660.173ms
+2026-11-14 13:25:06.291 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:25:06.414 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:25:06.416 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:25:06.416 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:25:06.416 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:25:23.138 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/attapply/resign-count - null null
+2026-11-14 13:25:23.393 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.ResignCount (PsnMgrService)'
+2026-11-14 13:25:23.405 +08:00 [INF] Route matched with {action = "ResignCount", controller = "MobileAttendanceApply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ResignCount() on controller PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController (PsnMgrService).
+2026-11-14 13:25:24.002 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType32`2[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:25:24.033 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.ResignCount (PsnMgrService) in 625.7314ms
+2026-11-14 13:25:24.041 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.ResignCount (PsnMgrService)'
+2026-11-14 13:25:24.044 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/attapply/resign-count - 200 null application/json; charset=utf-8 907.4923ms
+2026-11-14 13:25:24.199 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/attapply/resign - application/json 87
+2026-11-14 13:25:24.205 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService)'
+2026-11-14 13:25:24.210 +08:00 [INF] Route matched with {action = "Resign", controller = "MobileAttendanceApply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Resign(PsnMgrService.Controllers.MicroApi.ResignReq) on controller PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController (PsnMgrService).
+2026-11-14 13:25:24.580 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType33`4[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:25:24.587 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService) in 376.6368ms
+2026-11-14 13:25:24.587 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService)'
+2026-11-14 13:25:24.587 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/attapply/resign - 200 null application/json; charset=utf-8 388.1034ms
+2026-11-14 13:25:26.205 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - application/json 97
+2026-11-14 13:25:26.209 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:25:26.212 +08:00 [INF] Route matched with {action = "Audit", controller = "Admin_KQ_Apply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Audit(PsnMgrService.Controllers.KqAuditReq) on controller PsnMgrService.Controllers.Admin_KQ_ApplyController (PsnMgrService).
+2026-11-14 13:25:28.290 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:25:28.523 +08:00 [INF] Executed DbCommand (69ms) [Parameters=[@p0='?' (Size = 19)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [p].[Appeal_Date], [p].[Appeal_Time], [p].[Appeal_Type], [p].[Apply_No], [p].[Apply_Type], [p].[Audit_Remark], [p].[Audit_Time], [p].[Audit_User], [p].[Create_Time], [p].[ID_KEY], [p].[Kind_Name], [p].[Kind_No], [p].[Leave_Bgn], [p].[Leave_Days], [p].[Leave_End], [p].[Leave_Hour], [p].[Person_ID], [p].[Person_Name], [p].[Person_No], [p].[Reason], [p].[RowNum], [p].[Source], [p].[Status], [p].[Supply_Class], [p].[Supply_Date], [p].[Supply_Time], [p].[Target_Ids], [p].[Target_Table]
+FROM (
+
+    SELECT ID_KEY, Apply_No, Person_ID, Person_No, Person_Name, Apply_Type,
+           Supply_Date, Supply_Time, Supply_Class, Kind_No, Kind_Name,
+           Leave_Bgn, Leave_End, Leave_Hour, Leave_Days,
+           Appeal_Date, Appeal_Type, Appeal_Time, Reason, CAST(Status AS int) AS Status,
+           Audit_User, Audit_Time, Audit_Remark, Target_Table, Target_Ids, Source, Create_Time, 0 AS RowNum FROM WX_KQ_Apply WHERE Apply_No = @p0
+) AS [p]
+2026-11-14 13:25:28.561 +08:00 [ERR] An exception occurred while iterating over the results of a query for context type 'PsnMgrService.Models.AppDbContext'.
+System.InvalidCastException: Unable to cast object of type 'System.Int32' to type 'System.Int64'.
+   at Microsoft.Data.SqlClient.SqlBuffer.get_Int64()
+   at Microsoft.Data.SqlClient.SqlDataReader.GetInt64(Int32 i)
+   at lambda_method247(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+System.InvalidCastException: Unable to cast object of type 'System.Int32' to type 'System.Int64'.
+   at Microsoft.Data.SqlClient.SqlBuffer.get_Int64()
+   at Microsoft.Data.SqlClient.SqlDataReader.GetInt64(Int32 i)
+   at lambda_method247(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+2026-11-14 13:25:28.569 +08:00 [INF] Executed action PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService) in 2357.5739ms
+2026-11-14 13:25:28.571 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:25:28.572 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'System.Int32' to type 'System.Int64'.
+   at Microsoft.Data.SqlClient.SqlBuffer.get_Int64()
+   at Microsoft.Data.SqlClient.SqlDataReader.GetInt64(Int32 i)
+   at lambda_method247(Closure, QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method245(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit(KqAuditReq req) in E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService\Controllers\Admin_KQ_ApplyController.cs:line 144
+   at lambda_method237(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-11-14 13:25:28.614 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - 500 null text/plain; charset=utf-8 2408.9433ms
+2026-11-14 13:26:32.074 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:26:32.203 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:26:32.205 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:26:32.205 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:26:32.205 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:26:47.607 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - application/json 97
+2026-11-14 13:26:47.920 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:26:47.941 +08:00 [INF] Route matched with {action = "Audit", controller = "Admin_KQ_Apply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Audit(PsnMgrService.Controllers.KqAuditReq) on controller PsnMgrService.Controllers.Admin_KQ_ApplyController (PsnMgrService).
+2026-11-14 13:26:50.117 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:26:50.896 +08:00 [INF] Executed DbCommand (74ms) [Parameters=[@p0='?' (Size = 19)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [p].[Appeal_Date], [p].[Appeal_Time], [p].[Appeal_Type], [p].[Apply_No], [p].[Apply_Type], [p].[Audit_Remark], [p].[Audit_Time], [p].[Audit_User], [p].[Create_Time], [p].[ID_KEY], [p].[Kind_Name], [p].[Kind_No], [p].[Leave_Bgn], [p].[Leave_Days], [p].[Leave_End], [p].[Leave_Hour], [p].[Person_ID], [p].[Person_Name], [p].[Person_No], [p].[Reason], [p].[RowNum], [p].[Source], [p].[Status], [p].[Supply_Class], [p].[Supply_Date], [p].[Supply_Time], [p].[Target_Ids], [p].[Target_Table]
+FROM (
+
+    SELECT ID_KEY, Apply_No, Person_ID, Person_No, Person_Name, Apply_Type,
+           Supply_Date, Supply_Time, Supply_Class, Kind_No, Kind_Name,
+           Leave_Bgn, Leave_End, Leave_Hour, Leave_Days,
+           Appeal_Date, Appeal_Type, Appeal_Time, Reason, CAST(Status AS int) AS Status,
+           Audit_User, Audit_Time, Audit_Remark, Target_Table, Target_Ids, Source, Create_Time, CAST(0 AS bigint) AS RowNum FROM WX_KQ_Apply WHERE Apply_No = @p0
+) AS [p]
+2026-11-14 13:27:21.488 +08:00 [ERR] Failed executing DbCommand (30,091ms) [Parameters=[@DateBgn='?' (Size = 10), @DateEnd='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+EXEC KQ_pd_CalcDaily @DateBgn, @DateEnd
+2026-11-14 13:27:21.497 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType6`6[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:27:21.527 +08:00 [INF] Executed action PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService) in 33582.6098ms
+2026-11-14 13:27:21.529 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:27:21.537 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - 200 null application/json; charset=utf-8 33932.0494ms
+2026-11-14 13:30:30.891 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 13:30:31.072 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 13:30:31.074 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 13:30:31.074 +08:00 [INF] Hosting environment: Development
+2026-11-14 13:30:31.074 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 13:30:52.495 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/submit - application/json 226
+2026-11-14 13:30:52.833 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService)'
+2026-11-14 13:30:52.865 +08:00 [INF] Route matched with {action = "Submit", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Submit(PsnMgrService.Controllers.MicroApi.VisitorSubmitReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:30:56.091 +08:00 [INF] Executed DbCommand (165ms) [Parameters=[@__respondentId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__respondentId_0 AND [s].[Is_Del] = CAST(0 AS bit)
+2026-11-14 13:30:56.190 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:30:56.256 +08:00 [INF] Executed DbCommand (55ms) [Parameters=[@p0='?' (Size = 18), @p1='?' (DbType = Int32), @p2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Value]
+FROM (
+    SELECT COUNT(1) AS Value FROM VisitorApply
+                  WHERE VisitorID_number = @p0 AND Person_ID = @p1
+                    AND VisitOrNot IN (0,1) AND CAST(Start_Date AS date) = @p2
+) AS [s]
+2026-11-14 13:30:56.318 +08:00 [INF] Executed DbCommand (59ms) [Parameters=[@p0='?' (Size = 18), @p1='?' (Size = 5), @p2='?' (Size = 11), @p3='?'], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT 1 FROM VisitorUser WHERE VisitorID_number = @p0)
+                  UPDATE VisitorUser
+                  SET Visitor_Name = @p1, PhoneNumber = @p2, Visitor_Company = @p3, update_time = GETDATE()
+                  WHERE VisitorID_number = @p0
+              ELSE
+                  INSERT INTO VisitorUser (VisitorID_number, ID_Type, Visitor_Name, PhoneNumber, Visitor_Company, CreateTime, update_time)
+                  VALUES (@p0, N'身份证', @p1, @p2, @p3, GETDATE(), GETDATE())
+2026-11-14 13:30:56.378 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:30:56.843 +08:00 [INF] Executed DbCommand (273ms) [Parameters=[@p0='?' (Size = 50) (DbType = AnsiString), @p1='?' (Size = 300) (DbType = AnsiString), @p2='?' (DbType = DateTime), @p3='?' (Size = 12) (DbType = AnsiString), @p4='?' (Size = 200) (DbType = AnsiString), @p5='?' (DbType = DateTime), @p6='?' (Size = 12) (DbType = AnsiString), @p7='?' (DbType = DateTime), @p8='?' (Size = 50) (DbType = AnsiString), @p9='?' (DbType = Int32), @p10='?' (Size = 20) (DbType = AnsiString), @p11='?' (DbType = DateTime), @p12='?' (Size = 200) (DbType = AnsiString), @p13='?' (DbType = Int32), @p14='?' (Size = 30) (DbType = AnsiString), @p15='?' (Size = 200) (DbType = AnsiString), @p16='?' (Size = 15) (DbType = AnsiString), @p17='?' (Size = 30) (DbType = AnsiString), @p18='?' (DbType = DateTime), @p19='?' (DbType = DateTime), @p20='?' (DbType = DateTime), @p21='?' (DbType = DateTime), @p22='?' (Size = 20) (DbType = AnsiString), @p23='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [VisitorApply] ([Apply_No], [Approved_Reason], [Approved_Time], [Approved_User], [Carry_items], [CreateTime], [Empower_Card_No], [End_Date], [OpenID], [Person_ID], [Person_Mobile], [Start_Date], [Subject_Matter], [VisitOrNot], [VisitorID_number], [Visitor_Company], [Visitor_Number], [car_number], [check_intime], [check_outtime], [syn_time], [update_time], [visitor_type], [visitors_number])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+SELECT [ID_KEY], [Is_Up]
+FROM [VisitorApply]
+WHERE @@ROWCOUNT = 1 AND [ID_KEY] = scope_identity();
+2026-11-14 13:30:56.917 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType65`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:30:56.940 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService) in 4016.6169ms
+2026-11-14 13:30:56.942 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Submit (PsnMgrService)'
+2026-11-14 13:30:56.949 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/submit - 200 null application/json; charset=utf-8 4456.3007ms
+2026-11-14 13:30:57.130 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/list - null null
+2026-11-14 13:30:57.136 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService)'
+2026-11-14 13:30:57.146 +08:00 [INF] Route matched with {action = "List", controller = "MobileVisitor"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] List(System.String, System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:30:57.214 +08:00 [INF] Executed DbCommand (48ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:30:57.463 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType61`26[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:30:57.473 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService) in 327.0456ms
+2026-11-14 13:30:57.474 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.List (PsnMgrService)'
+2026-11-14 13:30:57.475 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/list - 200 null application/json; charset=utf-8 344.307ms
+2026-11-14 13:30:57.570 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/approve - application/json 25
+2026-11-14 13:30:57.573 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService)'
+2026-11-14 13:30:57.575 +08:00 [INF] Route matched with {action = "Approve", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Approve(PsnMgrService.Controllers.MicroApi.VisitorApproveReq) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:30:57.690 +08:00 [INF] Executed DbCommand (49ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:30:57.737 +08:00 [INF] Executed DbCommand (45ms) [Parameters=[@__Pid_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[Person_ID], [s].[Address], [s].[Birthday], [s].[C_PSD], [s].[Card_No], [s].[Card_SN], [s].[Cert_Code], [s].[Cert_Name], [s].[Dept_ID], [s].[Duty], [s].[Is_Del], [s].[Is_Marry], [s].[Nationality], [s].[NativePlace], [s].[OffWork_Date], [s].[OnWork_Date], [s].[OpenID], [s].[Person_Name], [s].[Person_No], [s].[Person_Type], [s].[Remark], [s].[Reserved1], [s].[Reserved2], [s].[Reserved3], [s].[Reserved4], [s].[Reserved5], [s].[Residence], [s].[Sex], [s].[Title], [s].[UnionID], [s].[id_number], [s].[mobile], [s].[update_time], [s].[wx_syn_time]
+FROM [ST_Person] AS [s]
+WHERE [s].[Person_ID] = @__Pid_0
+2026-11-14 13:30:57.796 +08:00 [INF] Executed DbCommand (54ms) [Parameters=[@p5='?' (DbType = Int32), @p0='?' (Size = 300) (DbType = AnsiString), @p1='?' (DbType = DateTime), @p2='?' (Size = 12) (DbType = AnsiString), @p3='?' (DbType = Int32), @p4='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [VisitorApply] SET [Approved_Reason] = @p0, [Approved_Time] = @p1, [Approved_User] = @p2, [VisitOrNot] = @p3, [update_time] = @p4
+WHERE [ID_KEY] = @p5;
+SELECT @@ROWCOUNT;
+2026-11-14 13:30:58.013 +08:00 [INF] Executed DbCommand (209ms) [Parameters=[@__idCard_0='?' (Size = 30) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[CreateTime], [v].[ID_Type], [v].[Is_Up], [v].[OpenID], [v].[PhoneNumber], [v].[VisitorID_number], [v].[VisitorPhoto], [v].[VisitorPhotoUrl], [v].[Visitor_Company], [v].[Visitor_Name], [v].[syn_time], [v].[update_time]
+FROM [VisitorUser] AS [v]
+WHERE [v].[VisitorID_number] = @__idCard_0
+2026-11-14 13:30:58.065 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType69`5[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:30:58.066 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService) in 491.5058ms
+2026-11-14 13:30:58.066 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Approve (PsnMgrService)'
+2026-11-14 13:30:58.067 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/visitor/approve - 200 null application/json; charset=utf-8 496.9059ms
+2026-11-14 13:30:58.137 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=11 - null null
+2026-11-14 13:30:58.138 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:30:58.139 +08:00 [INF] Route matched with {action = "QrCode", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QrCode(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:30:58.261 +08:00 [INF] Executed DbCommand (115ms) [Parameters=[@__key_0='?' (DbType = Int32), @__Pid_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[ID_KEY] = @__key_0 AND [v].[Person_ID] = @__Pid_1
+2026-11-14 13:30:58.262 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType74`6[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:30:58.263 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService) in 124.3232ms
+2026-11-14 13:30:58.263 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.QrCode (PsnMgrService)'
+2026-11-14 13:30:58.264 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/qrcode?id=11 - 200 null application/json; charset=utf-8 126.3136ms
+2026-11-14 13:30:59.300 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/verify?token=VIS1.VIS20261114133056699.1794650400.7ec29ecb227ee82d4829c7e5a054f955 - null null
+2026-11-14 13:30:59.357 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService)'
+2026-11-14 13:30:59.358 +08:00 [INF] Route matched with {action = "Verify", controller = "MobileVisitor"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Verify(System.String) on controller PsnMgrService.Controllers.MicroApi.MobileVisitorController (PsnMgrService).
+2026-11-14 13:30:59.414 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__applyNo_0='?' (Size = 50) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[Apply_No], [v].[Approved_Reason], [v].[Approved_Time], [v].[Approved_User], [v].[Carry_items], [v].[CreateTime], [v].[Empower_Card_No], [v].[End_Date], [v].[Is_Up], [v].[OpenID], [v].[Person_ID], [v].[Person_Mobile], [v].[Start_Date], [v].[Subject_Matter], [v].[VisitOrNot], [v].[VisitorID_number], [v].[Visitor_Company], [v].[Visitor_Number], [v].[car_number], [v].[check_intime], [v].[check_outtime], [v].[syn_time], [v].[update_time], [v].[visitor_type], [v].[visitors_number]
+FROM [VisitorApply] AS [v]
+WHERE [v].[Apply_No] = @__applyNo_0
+2026-11-14 13:30:59.461 +08:00 [INF] Executed DbCommand (46ms) [Parameters=[@__idCard_0='?' (Size = 30) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [v].[ID_KEY], [v].[CreateTime], [v].[ID_Type], [v].[Is_Up], [v].[OpenID], [v].[PhoneNumber], [v].[VisitorID_number], [v].[VisitorPhoto], [v].[VisitorPhotoUrl], [v].[Visitor_Company], [v].[Visitor_Name], [v].[syn_time], [v].[update_time]
+FROM [VisitorUser] AS [v]
+WHERE [v].[VisitorID_number] = @__idCard_0
+2026-11-14 13:30:59.462 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`10[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:30:59.464 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService) in 106.183ms
+2026-11-14 13:30:59.464 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileVisitorController.Verify (PsnMgrService)'
+2026-11-14 13:30:59.464 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/visitor/verify?token=VIS1.VIS20261114133056699.1794650400.7ec29ecb227ee82d4829c7e5a054f955 - 200 null application/json; charset=utf-8 164.0738ms
+2026-11-14 13:30:59.575 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/m/attapply/resign - application/json 87
+2026-11-14 13:30:59.576 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService)'
+2026-11-14 13:30:59.579 +08:00 [INF] Route matched with {action = "Resign", controller = "MobileAttendanceApply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Resign(PsnMgrService.Controllers.MicroApi.ResignReq) on controller PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController (PsnMgrService).
+2026-11-14 13:31:00.056 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType33`4[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:31:00.058 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService) in 479.0576ms
+2026-11-14 13:31:00.058 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.Resign (PsnMgrService)'
+2026-11-14 13:31:00.058 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/m/attapply/resign - 200 null application/json; charset=utf-8 482.879ms
+2026-11-14 13:31:00.379 +08:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - application/json 91
+2026-11-14 13:31:00.380 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:31:00.382 +08:00 [INF] Route matched with {action = "Audit", controller = "Admin_KQ_Apply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Audit(PsnMgrService.Controllers.KqAuditReq) on controller PsnMgrService.Controllers.Admin_KQ_ApplyController (PsnMgrService).
+2026-11-14 13:31:00.401 +08:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-11-14 13:31:00.455 +08:00 [INF] Executed DbCommand (48ms) [Parameters=[@p0='?' (Size = 19)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [p].[Appeal_Date], [p].[Appeal_Time], [p].[Appeal_Type], [p].[Apply_No], [p].[Apply_Type], [p].[Audit_Remark], [p].[Audit_Time], [p].[Audit_User], [p].[Create_Time], [p].[ID_KEY], [p].[Kind_Name], [p].[Kind_No], [p].[Leave_Bgn], [p].[Leave_Days], [p].[Leave_End], [p].[Leave_Hour], [p].[Person_ID], [p].[Person_Name], [p].[Person_No], [p].[Reason], [p].[RowNum], [p].[Source], [p].[Status], [p].[Supply_Class], [p].[Supply_Date], [p].[Supply_Time], [p].[Target_Ids], [p].[Target_Table]
+FROM (
+
+    SELECT ID_KEY, Apply_No, Person_ID, Person_No, Person_Name, Apply_Type,
+           Supply_Date, Supply_Time, Supply_Class, Kind_No, Kind_Name,
+           Leave_Bgn, Leave_End, Leave_Hour, Leave_Days,
+           Appeal_Date, Appeal_Type, Appeal_Time, Reason, CAST(Status AS int) AS Status,
+           Audit_User, Audit_Time, Audit_Remark, Target_Table, Target_Ids, Source, Create_Time, CAST(0 AS bigint) AS RowNum FROM WX_KQ_Apply WHERE Apply_No = @p0
+) AS [p]
+2026-11-14 13:34:27.818 +08:00 [INF] Executed DbCommand (207,014ms) [Parameters=[@DateBgn='?' (Size = 10), @DateEnd='?' (Size = 10)], CommandType='"Text"', CommandTimeout='300']
+EXEC KQ_pd_CalcDaily @DateBgn, @DateEnd
+2026-11-14 13:34:27.841 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType6`6[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-11-14 13:34:27.847 +08:00 [INF] Executed action PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService) in 207465.67ms
+2026-11-14 13:34:27.848 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.Admin_KQ_ApplyController.Audit (PsnMgrService)'
+2026-11-14 13:34:27.848 +08:00 [INF] Request finished HTTP/1.1 POST http://127.0.0.1:5187/api/Admin_KQ_Apply/audit - 200 null application/json; charset=utf-8 207468.894ms
+2026-11-14 13:34:30.188 +08:00 [INF] Request starting HTTP/1.1 GET http://127.0.0.1:5187/api/m/attapply/list - null null
+2026-11-14 13:34:30.193 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.List (PsnMgrService)'
+2026-11-14 13:34:30.201 +08:00 [INF] Route matched with {action = "List", controller = "MobileAttendanceApply"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult List() on controller PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController (PsnMgrService).
+2026-11-14 13:34:30.416 +08:00 [INF] Executed DbCommand (145ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+
+SELECT ID_KEY, Apply_No, Person_ID, Apply_Type, Supply_Date, Supply_Time, Supply_Class,
+       Kind_No, Kind_Name, Leave_Bgn, Leave_End, Leave_Hour, Leave_Days,
+       Appeal_Date, Appeal_Type, Appeal_Time, Reason, CAST(Status AS int) AS Status,
+       Audit_User, Audit_Time, Audit_Remark, Target_Table, Target_Ids, Create_Time
+FROM WX_KQ_Apply WHERE Person_ID = @p0 ORDER BY Create_Time DESC
+2026-11-14 13:34:30.421 +08:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType31`13[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 13:34:30.424 +08:00 [INF] Executed action PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.List (PsnMgrService) in 223.0669ms
+2026-11-14 13:34:30.424 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.MicroApi.MobileAttendanceApplyController.List (PsnMgrService)'
+2026-11-14 13:34:30.424 +08:00 [INF] Request finished HTTP/1.1 GET http://127.0.0.1:5187/api/m/attapply/list - 200 null application/json; charset=utf-8 236.0396ms

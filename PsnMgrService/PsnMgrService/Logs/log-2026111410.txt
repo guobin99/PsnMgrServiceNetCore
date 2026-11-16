@@ -1,0 +1,41 @@
+2026-11-14 10:11:59.716 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 10:12:00.274 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 10:12:00.521 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 10:12:00.521 +08:00 [INF] Hosting environment: Development
+2026-11-14 10:12:00.521 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 10:15:35.980 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 10:15:36.713 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 10:15:36.893 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 10:15:36.893 +08:00 [INF] Hosting environment: Development
+2026-11-14 10:15:36.893 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 10:16:06.237 +08:00 [INF] Request starting HTTP/1.1 POST http://localhost:5187/api/auth/login - application/json 56
+2026-11-14 10:16:06.402 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.AuthController.LoginAsync (PsnMgrService)'
+2026-11-14 10:16:06.433 +08:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] LoginAsync(PsnMgrService.Controllers.LoginRequest) on controller PsnMgrService.Controllers.AuthController (PsnMgrService).
+2026-11-14 10:16:06.987 +08:00 [INF] Executing action method PsnMgrService.Controllers.AuthController.LoginAsync (PsnMgrService) - Validation state: "Valid"
+2026-11-14 10:16:10.295 +08:00 [INF] Executed DbCommand (101ms) [Parameters=[@__8__locals1_request_UserNo_0='?' (Size = 20) (DbType = AnsiString), @__password_1='?' (Size = 200) (DbType = AnsiString)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [s].[User_No], [s].[Card_No], [s].[Computer_Name], [s].[Current_Menu], [s].[Is_Del], [s].[Is_Using], [s].[Login_Time], [s].[Remark], [s].[Role_No], [s].[User_Moc], [s].[User_Name], [s].[User_Pwd], [s].[User_Type], [s].[Using_Form], [s].[Using_Model]
+FROM [ST_UserInfo] AS [s]
+WHERE [s].[User_No] = @__8__locals1_request_UserNo_0 AND [s].[Is_Del] = CAST(0 AS bit) AND ([s].[User_Pwd] = @__password_1 OR ([s].[User_Pwd] IS NOT NULL AND LEFT(@__password_1, LEN([s].[User_Pwd])) = [s].[User_Pwd]))
+2026-11-14 10:16:10.383 +08:00 [INF] 用户 admin 登录成功，Token 已生成
+2026-11-14 10:16:10.414 +08:00 [INF] Executed action method PsnMgrService.Controllers.AuthController.LoginAsync (PsnMgrService), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 3423.4129ms.
+2026-11-14 10:16:10.423 +08:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[PsnMgrService.Models.ST_UserInfo, PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 10:16:10.459 +08:00 [INF] Executed action PsnMgrService.Controllers.AuthController.LoginAsync (PsnMgrService) in 4022.7015ms
+2026-11-14 10:16:10.459 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.AuthController.LoginAsync (PsnMgrService)'
+2026-11-14 10:16:10.469 +08:00 [INF] Request finished HTTP/1.1 POST http://localhost:5187/api/auth/login - 200 null application/json; charset=utf-8 4244.0776ms
+2026-11-14 10:17:09.131 +08:00 [INF] User profile is available. Using 'C:\Users\Administrator\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-11-14 10:17:09.407 +08:00 [INF] Now listening on: http://localhost:5187
+2026-11-14 10:17:09.468 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-11-14 10:17:09.468 +08:00 [INF] Hosting environment: Development
+2026-11-14 10:17:09.468 +08:00 [INF] Content root path: E:\zhimen\2026Ant\PsnMgrService(NetCore)\PsnMgrService\PsnMgrService
+2026-11-14 10:17:15.293 +08:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/api/st_department - null null
+2026-11-14 10:17:15.685 +08:00 [INF] Executing endpoint 'PsnMgrService.Controllers.ST_DepartmentController.GetST_Departments (PsnMgrService)'
+2026-11-14 10:17:15.699 +08:00 [INF] Route matched with {action = "GetST_Departments", controller = "ST_Department"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[PsnMgrService.Models.ST_Department]]] GetST_Departments() on controller PsnMgrService.Controllers.ST_DepartmentController (PsnMgrService).
+2026-11-14 10:17:15.995 +08:00 [INF] Executing action method PsnMgrService.Controllers.ST_DepartmentController.GetST_Departments (PsnMgrService) - Validation state: "Valid"
+2026-11-14 10:17:18.687 +08:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Dept_ID], [s].[Add_Col1], [s].[Add_Col2], [s].[Create_Time], [s].[Dept_Chief], [s].[Dept_Duty], [s].[Dept_Name], [s].[Dept_No], [s].[Dept_Sort], [s].[Dept_Telphone], [s].[Dept_Total], [s].[Is_Del], [s].[Remark]
+FROM [ST_Department] AS [s]
+2026-11-14 10:17:18.791 +08:00 [INF] Executed action method PsnMgrService.Controllers.ST_DepartmentController.GetST_Departments (PsnMgrService), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 2792.0818ms.
+2026-11-14 10:17:18.804 +08:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[PsnMgrService.Models.ST_Department, PsnMgrService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-11-14 10:17:18.866 +08:00 [INF] Executed action PsnMgrService.Controllers.ST_DepartmentController.GetST_Departments (PsnMgrService) in 3163.2054ms
+2026-11-14 10:17:18.867 +08:00 [INF] Executed endpoint 'PsnMgrService.Controllers.ST_DepartmentController.GetST_Departments (PsnMgrService)'
+2026-11-14 10:17:18.881 +08:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/api/st_department - 200 null application/json; charset=utf-8 3594.763ms

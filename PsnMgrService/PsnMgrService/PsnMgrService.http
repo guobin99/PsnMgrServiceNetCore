@@ -1,0 +1,16 @@
+@PsnMgrService_HostAddress = http://localhost:5187
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImp0aSI6IjVlZmFkM2E2LTc0MzMtNDlmYS04MWZlLTk0Y2NhZWU5NmVjNCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhZG1pbiIsImV4cCI6MTc5NDYyNjE3MCwiaXNzIjoiTXlXZWJBcGkiLCJhdWQiOiJNeVdlYkFwaUNsaWVudCJ9.wFaF2errdHuaRRgrbMEjDF5nN7xVsCsEfuEgVXaRVpg
+
+POST {{PsnMgrService_HostAddress}}/api/auth/login
+Accept: application/json
+Content-Type: application/json
+{
+    "UserNo":"admin",
+    "Password":"<PASSWORD>"
+}
+###
+GET {{PsnMgrService_HostAddress}}/api/st_department
+Authorization:Bearer {{token}}
+Accept: application/json
+
+###
