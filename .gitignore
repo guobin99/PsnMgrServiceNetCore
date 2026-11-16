@@ -1,0 +1,36 @@
+# ---------- 编译产物 ----------
+[Bb]in/
+[Oo]bj/
+[Pp]ackages/
+.vs/
+.vscode/
+*.user
+*.suo
+*.cache
+*.pdb
+*.nupkg
+
+# ---------- 日志 ----------
+[Ll]ogs/
+*.log
+
+# ---------- 压缩包 ----------
+*.zip
+*.7z
+*.rar
+
+# ---------- 含密钥的配置：不入库，按 appsettings.Example.json 本地填写 ----------
+# 数据库连接串（含密码）、JWT 密钥、微信 AppSecret / 支付密钥、阿里云短信 AK
+PsnMgrService/PsnMgrService/appsettings.json
+PsnMgrService/PsnMgrService/appsettings.Development.json
+
+# ---------- 证书与私钥 ----------
+*.p12
+*.pfx
+*.pem
+*.key
+cert/
+
+# ---------- 其他 ----------
+.DS_Store
+Thumbs.db
