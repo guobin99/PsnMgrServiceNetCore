@@ -6,7 +6,7 @@ if exists(select * from syscolumns where id=object_id('ST_Department') and name=
 	alter table ST_Department alter column Dept_Name varchar(100)
 if not exists(select * from syscolumns where id=object_id('ST_Department') and name='Dept_Sort')  
 	alter table ST_Department add Dept_Sort int null	
-if not exists(select * from syscolumns where id=object_id('ST_Department') and name='Dept_Telphone')  
+if not exists(select * from syscolumns where id=object_id('ST_Department') and name='Dept_Telphone')
 	alter table ST_Department add Dept_Telphone varchar(30) null	
 if not exists(select * from syscolumns where id=object_id('ST_Department') and name='Create_Time')  
 	alter table ST_Department add Create_Time datetime null	
@@ -1720,4 +1720,1590 @@ END
 GO
 
 
+/*===========================================================
+  人脸通 BS：系统管理-组织与权限
+  1) 只新增 BS_ 前缀对象与可空扩展列，不修改/删除 CS 既有结构
+  2) 脚本幂等，可重复执行
+  3) BS 菜单写入 ST_MenuInfo（System_No='BS'，Menu_ID 9000-9999 段）
+===========================================================*/
 
+/*---------- 12.3 新增可空列 ----------*/
+IF COL_LENGTH('dbo.ST_UserInfo', 'BS_Dept_ID') IS NULL
+    ALTER TABLE dbo.ST_UserInfo ADD BS_Dept_ID INT NULL;
+IF COL_LENGTH('dbo.ST_UserInfo', 'BS_Fail_Count') IS NULL
+    ALTER TABLE dbo.ST_UserInfo ADD BS_Fail_Count SMALLINT NULL;
+IF COL_LENGTH('dbo.ST_UserInfo', 'BS_Lock_Until') IS NULL
+    ALTER TABLE dbo.ST_UserInfo ADD BS_Lock_Until DATETIME NULL;
+IF COL_LENGTH('dbo.ST_UserInfo', 'BS_Pwd_Update_Time') IS NULL
+    ALTER TABLE dbo.ST_UserInfo ADD BS_Pwd_Update_Time DATETIME NULL;
+IF COL_LENGTH('dbo.ST_UserInfo', 'BS_Last_Login_IP') IS NULL
+    ALTER TABLE dbo.ST_UserInfo ADD BS_Last_Login_IP VARCHAR(45) NULL;
+IF COL_LENGTH('dbo.ST_Department', 'BS_Parent_ID') IS NULL
+    ALTER TABLE dbo.ST_Department ADD BS_Parent_ID INT NULL;
+IF COL_LENGTH('dbo.ST_Department', 'BS_Level') IS NULL
+    ALTER TABLE dbo.ST_Department ADD BS_Level TINYINT NULL;
+IF COL_LENGTH('dbo.ST_Department', 'BS_Sort_No') IS NULL
+    ALTER TABLE dbo.ST_Department ADD BS_Sort_No INT NULL;
+IF COL_LENGTH('dbo.ST_Department', 'BS_Dept_Type') IS NULL
+    ALTER TABLE dbo.ST_Department ADD BS_Dept_Type VARCHAR(20) NULL;
+GO
+
+/*---------- 12.2 新增 BS_ 表 ----------*/
+IF OBJECT_ID('dbo.BS_RightCodeMap', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_RightCodeMap (
+        ID_KEY INT IDENTITY NOT NULL,
+        Menu_ID INT NOT NULL,
+        Right_ID CHAR(1) NOT NULL,
+        Permission_Code VARCHAR(64) NOT NULL,
+        Api_Route VARCHAR(200) NULL,
+        Remark VARCHAR(200) NULL,
+        CONSTRAINT PK_BS_RightCodeMap PRIMARY KEY CLUSTERED (ID_KEY),
+        CONSTRAINT UQ_BS_RightCodeMap_Menu_Right UNIQUE (Menu_ID, Right_ID)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_UserDataScope', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_UserDataScope (
+        User_No VARCHAR(20) NOT NULL,
+        Scope_Type TINYINT NOT NULL CONSTRAINT DF_BS_UserDataScope_Type DEFAULT (3),
+        Owner_Dept_ID INT NULL,
+        Summary VARCHAR(200) NULL,
+        Update_Time DATETIME NOT NULL CONSTRAINT DF_BS_UserDataScope_Time DEFAULT (GETDATE()),
+        Update_User VARCHAR(20) NULL,
+        CONSTRAINT PK_BS_UserDataScope PRIMARY KEY CLUSTERED (User_No)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_UserMOCRight', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_UserMOCRight (
+        User_No VARCHAR(20) NOT NULL,
+        MOC_No VARCHAR(6) NOT NULL,
+        Right_Level TINYINT NOT NULL CONSTRAINT DF_BS_UserMOCRight_Level DEFAULT (1),
+        Update_Time DATETIME NOT NULL CONSTRAINT DF_BS_UserMOCRight_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_UserMOCRight PRIMARY KEY CLUSTERED (User_No, MOC_No)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_UserSubSysRight', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_UserSubSysRight (
+        User_No VARCHAR(20) NOT NULL,
+        System_No VARCHAR(10) NOT NULL,
+        Is_Allow BIT NOT NULL CONSTRAINT DF_BS_UserSubSysRight_Allow DEFAULT (1),
+        Update_Time DATETIME NOT NULL CONSTRAINT DF_BS_UserSubSysRight_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_UserSubSysRight PRIMARY KEY CLUSTERED (User_No, System_No)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_OperLog', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_OperLog (
+        ID_KEY BIGINT IDENTITY NOT NULL,
+        User_No VARCHAR(20) NULL,
+        User_Name VARCHAR(20) NULL,
+        Module VARCHAR(30) NOT NULL,
+        Action VARCHAR(30) NOT NULL,
+        Target VARCHAR(100) NULL,
+        Target_Key VARCHAR(50) NULL,
+        Before_Value NVARCHAR(MAX) NULL,
+        After_Value NVARCHAR(MAX) NULL,
+        IP VARCHAR(45) NULL,
+        User_Agent VARCHAR(200) NULL,
+        Result TINYINT NOT NULL CONSTRAINT DF_BS_OperLog_Result DEFAULT (0),
+        Message VARCHAR(500) NULL,
+        Trace_ID VARCHAR(36) NULL,
+        Opt_Time DATETIME NOT NULL CONSTRAINT DF_BS_OperLog_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_OperLog PRIMARY KEY CLUSTERED (ID_KEY)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_LoginLog', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_LoginLog (
+        ID_KEY BIGINT IDENTITY NOT NULL,
+        User_No VARCHAR(20) NULL,
+        Login_Type VARCHAR(20) NOT NULL,
+        Result TINYINT NOT NULL CONSTRAINT DF_BS_LoginLog_Result DEFAULT (0),
+        Fail_Reason VARCHAR(100) NULL,
+        IP VARCHAR(45) NULL,
+        User_Agent VARCHAR(200) NULL,
+        Login_Time DATETIME NOT NULL CONSTRAINT DF_BS_LoginLog_Time DEFAULT (GETDATE()),
+        Logout_Time DATETIME NULL,
+        Session_ID VARCHAR(36) NULL,
+        CONSTRAINT PK_BS_LoginLog PRIMARY KEY CLUSTERED (ID_KEY)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_SysConfig', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_SysConfig (
+        Config_ID INT IDENTITY NOT NULL,
+        Config_Key VARCHAR(64) NOT NULL,
+        Config_Value NVARCHAR(500) NULL,
+        Remark VARCHAR(200) NULL,
+        Update_Time DATETIME NOT NULL CONSTRAINT DF_BS_SysConfig_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_SysConfig PRIMARY KEY CLUSTERED (Config_ID),
+        CONSTRAINT UQ_BS_SysConfig_Key UNIQUE (Config_Key)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_PwdHistory', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_PwdHistory (
+        ID_KEY BIGINT IDENTITY NOT NULL,
+        User_No VARCHAR(20) NOT NULL,
+        Pwd_Cipher VARCHAR(200) NOT NULL,
+        Create_Time DATETIME NOT NULL CONSTRAINT DF_BS_PwdHistory_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_PwdHistory PRIMARY KEY CLUSTERED (ID_KEY)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_AuthToken', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_AuthToken (
+        Token_ID VARCHAR(36) NOT NULL,
+        User_No VARCHAR(20) NOT NULL,
+        Token_Hash VARCHAR(128) NOT NULL,
+        Expire_Time DATETIME NOT NULL,
+        Revoked BIT NOT NULL CONSTRAINT DF_BS_AuthToken_Revoked DEFAULT (0),
+        Client_Info VARCHAR(200) NULL,
+        Create_Time DATETIME NOT NULL CONSTRAINT DF_BS_AuthToken_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_AuthToken PRIMARY KEY CLUSTERED (Token_ID)
+    )
+END
+GO
+
+/*---------- 12.5 索引补充 ----------*/
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_UserInfo_Dept' AND object_id = OBJECT_ID('ST_UserInfo'))
+    CREATE INDEX IX_BS_UserInfo_Dept ON dbo.ST_UserInfo (BS_Dept_ID) INCLUDE (Role_No, Is_Del);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_RightCodeMap_Code' AND object_id = OBJECT_ID('BS_RightCodeMap'))
+    CREATE INDEX IX_BS_RightCodeMap_Code ON dbo.BS_RightCodeMap (Permission_Code);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_UserMOCRight_MOC' AND object_id = OBJECT_ID('BS_UserMOCRight'))
+    CREATE INDEX IX_BS_UserMOCRight_MOC ON dbo.BS_UserMOCRight (MOC_No) INCLUDE (Right_Level);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_UserSubSysRight_System' AND object_id = OBJECT_ID('BS_UserSubSysRight'))
+    CREATE INDEX IX_BS_UserSubSysRight_System ON dbo.BS_UserSubSysRight (System_No) INCLUDE (Is_Allow);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_OperLog_Time' AND object_id = OBJECT_ID('BS_OperLog'))
+    CREATE INDEX IX_BS_OperLog_Time ON dbo.BS_OperLog (Opt_Time DESC, User_No);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_LoginLog_Time' AND object_id = OBJECT_ID('BS_LoginLog'))
+    CREATE INDEX IX_BS_LoginLog_Time ON dbo.BS_LoginLog (Login_Time DESC, User_No);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_PwdHistory_User' AND object_id = OBJECT_ID('BS_PwdHistory'))
+    CREATE INDEX IX_BS_PwdHistory_User ON dbo.BS_PwdHistory (User_No, Create_Time DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_AuthToken_User' AND object_id = OBJECT_ID('BS_AuthToken'))
+    CREATE INDEX IX_BS_AuthToken_User ON dbo.BS_AuthToken (User_No, Revoked, Expire_Time);
+GO
+
+/*---------- 12.6 初始化：子系统、BS 菜单、权限位、权限码映射、版本 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_SubSystem WHERE System_No = 'BS')
+    INSERT INTO dbo.ST_SubSystem (System_No, System_Name, System_ExeName, Index_No)
+    VALUES ('BS', N'人脸通BS管理端', 'Web', 9);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = 9000)
+    INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+    VALUES (9000, 'BS', 'BS', N'人脸通BS', -1, 1, NULL, 100);
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = 9009)
+    INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+    VALUES (9009, 'BS', 'BS_SYSTEM', N'系统管理', 9000, 1, NULL, 9);
+GO
+
+DECLARE @Menus TABLE (
+    Menu_ID INT NOT NULL,
+    Menu_No VARCHAR(20) NOT NULL,
+    Menu_Name NVARCHAR(20) NOT NULL,
+    Form_Name VARCHAR(50) NOT NULL,
+    Menu_Index TINYINT NOT NULL,
+    Rights VARCHAR(10) NOT NULL
+);
+DECLARE @RightNames TABLE (Right_ID CHAR(1) PRIMARY KEY, Right_Name NVARCHAR(20), Suffix VARCHAR(20));
+INSERT INTO @Menus (Menu_ID, Menu_No, Menu_Name, Form_Name, Menu_Index, Rights) VALUES
+    (900901, 'BS_SYS_OPERATOR',     N'操作员管理',   '/system/operator',        1, '012357'),
+    (900902, 'BS_SYS_ROLE',         N'角色管理',     '/system/role',            2, '012368'),
+    (900903, 'BS_SYS_PERMISSION',   N'菜单与操作权限', '/system/permission',    3, '06'),
+    (900904, 'BS_SYS_DEPTRIGHT',    N'部门数据权限', '/system/dept-right',      4, '06'),
+    (900905, 'BS_SYS_DEVICERIGHT',  N'设备权限',     '/system/device-right',    5, '06'),
+    (900906, 'BS_SYS_SUBSYSRIGHT',  N'子系统权限',   '/system/subsystem-right', 6, '06'),
+    (900907, 'BS_SYS_CASHIERAUTH',  N'出纳授权管理', '/system/cashier-auth',    7, '06');
+INSERT INTO @RightNames (Right_ID, Right_Name, Suffix) VALUES
+    ('0', N'查看', 'view'),
+    ('1', N'新增', 'create'),
+    ('2', N'修改', 'update'),
+    ('3', N'删除', 'delete'),
+    ('5', N'重置密码', 'resetPwd'),
+    ('6', N'分配权限', 'assign'),
+    ('7', N'启停', 'status'),
+    ('8', N'复制', 'copy');
+
+DECLARE @MenuId INT, @MenuNo VARCHAR(20), @Rights VARCHAR(10), @RightId CHAR(1), @RightName NVARCHAR(20), @Suffix VARCHAR(20);
+DECLARE @MenuName NVARCHAR(20), @FormName VARCHAR(50), @MenuIndex TINYINT;
+DECLARE @Index INT, @Resource VARCHAR(30), @PermissionCode VARCHAR(64);
+DECLARE menu_cursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT Menu_ID, Menu_No, Menu_Name, Form_Name, Menu_Index, Rights FROM @Menus;
+OPEN menu_cursor;
+FETCH NEXT FROM menu_cursor INTO @MenuId, @MenuNo, @MenuName, @FormName, @MenuIndex, @Rights;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = @MenuId)
+        INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+        VALUES (@MenuId, 'BS', @MenuNo, @MenuName, 9009, 1, @FormName, @MenuIndex);
+
+    SET @Index = 1;
+    WHILE @Index <= LEN(@Rights)
+    BEGIN
+        SET @RightId = SUBSTRING(@Rights, @Index, 1);
+        SELECT @RightName = Right_Name, @Suffix = Suffix FROM @RightNames WHERE Right_ID = @RightId;
+        IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightValue WHERE Right_ID = @RightId AND Form_Name = @MenuNo)
+            INSERT INTO dbo.ST_RightValue (Right_ID, Form_Name, Right_Name)
+            VALUES (@RightId, @MenuNo, @RightName);
+        SET @Index = @Index + 1;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightInfo WHERE Menu_ID = @MenuId)
+        INSERT INTO dbo.ST_RightInfo (Menu_ID, Form_Name, Right_Values, Remark)
+        VALUES (@MenuId, @MenuNo, @Rights, N'BS页面权限位');
+    ELSE
+        UPDATE dbo.ST_RightInfo SET Right_Values = @Rights WHERE Menu_ID = @MenuId;
+
+    SET @Resource = LOWER(SUBSTRING(@MenuNo, 8, 1)) + LOWER(SUBSTRING(@MenuNo, 9, 20));
+    SET @Index = 1;
+    WHILE @Index <= LEN(@Rights)
+    BEGIN
+        SET @RightId = SUBSTRING(@Rights, @Index, 1);
+        SELECT @Suffix = Suffix FROM @RightNames WHERE Right_ID = @RightId;
+        SET @PermissionCode = 'system:' + @Resource + ':' + @Suffix;
+        IF NOT EXISTS (SELECT 1 FROM dbo.BS_RightCodeMap WHERE Menu_ID = @MenuId AND Right_ID = @RightId)
+            INSERT INTO dbo.BS_RightCodeMap (Menu_ID, Right_ID, Permission_Code, Api_Route, Remark)
+            VALUES (@MenuId, @RightId, @PermissionCode, NULL, N'BS权限码映射');
+        SET @Index = @Index + 1;
+    END
+
+    IF EXISTS (SELECT 1 FROM dbo.ST_RoleInfo WHERE Role_No = 'Administrators')
+    BEGIN
+        IF EXISTS (SELECT 1 FROM dbo.ST_RoleRight WHERE Role_No = 'Administrators' AND Menu_ID = @MenuId)
+            UPDATE dbo.ST_RoleRight SET Right_Values = @Rights
+            WHERE Role_No = 'Administrators' AND Menu_ID = @MenuId;
+        ELSE
+            INSERT INTO dbo.ST_RoleRight (Role_No, Menu_ID, Right_Values)
+            VALUES ('Administrators', @MenuId, @Rights);
+    END
+
+    FETCH NEXT FROM menu_cursor INTO @MenuId, @MenuNo, @MenuName, @FormName, @MenuIndex, @Rights;
+END
+CLOSE menu_cursor;
+DEALLOCATE menu_cursor;
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Permission.Version')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Permission.Version', '1', N'权限版本，授权变更后自增');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Schema.Version')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Schema.Version', '1', N'BS结构版本');
+GO
+
+/* =====================================================================================
+   13. 系统配置与安全审计（对应《系统配置与安全审计详细设计文档》第十三章）
+   原则：只增不删；新增对象一律 BS_ 前缀；新增列可空或带默认值；脚本可重复执行。
+   ===================================================================================== */
+GO
+
+/*---------- 13.1 ST_BlackPerson 新增审计列（可空，对 CS 透明） ----------*/
+IF COL_LENGTH('dbo.ST_BlackPerson', 'BS_User_No') IS NULL
+    ALTER TABLE dbo.ST_BlackPerson ADD BS_User_No VARCHAR(20) NULL;
+IF COL_LENGTH('dbo.ST_BlackPerson', 'BS_Add_Time') IS NULL
+    ALTER TABLE dbo.ST_BlackPerson ADD BS_Add_Time DATETIME NULL;
+IF COL_LENGTH('dbo.ST_BlackPerson', 'BS_Release_User') IS NULL
+    ALTER TABLE dbo.ST_BlackPerson ADD BS_Release_User VARCHAR(20) NULL;
+IF COL_LENGTH('dbo.ST_BlackPerson', 'BS_Release_Time') IS NULL
+    ALTER TABLE dbo.ST_BlackPerson ADD BS_Release_Time DATETIME NULL;
+GO
+
+/*---------- 13.2 新增表 ----------*/
+IF OBJECT_ID('dbo.BS_ParamMeta', 'U') IS NULL
+CREATE TABLE dbo.BS_ParamMeta (
+    Meta_ID          INT IDENTITY NOT NULL,
+    Scope            VARCHAR(10) NOT NULL,
+    Param_Code       VARCHAR(40) NOT NULL,
+    Param_Name       VARCHAR(100) NULL,
+    Param_Type       VARCHAR(20) NOT NULL CONSTRAINT DF_BS_ParamMeta_Type DEFAULT ('string'),
+    Param_Options    VARCHAR(500) NULL,
+    Default_Value    VARCHAR(100) NULL,
+    Min_Value        VARCHAR(50) NULL,
+    Max_Value        VARCHAR(50) NULL,
+    Group_Name       VARCHAR(50) NULL,
+    Is_ReadOnly      BIT NOT NULL CONSTRAINT DF_BS_ParamMeta_ReadOnly DEFAULT (0),
+    Restart_Required BIT NOT NULL CONSTRAINT DF_BS_ParamMeta_Restart DEFAULT (0),
+    Remark           VARCHAR(200) NULL,
+    Update_User      VARCHAR(20) NULL,
+    Update_Time      DATETIME NOT NULL CONSTRAINT DF_BS_ParamMeta_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_ParamMeta PRIMARY KEY CLUSTERED (Meta_ID),
+    CONSTRAINT UQ_BS_ParamMeta UNIQUE (Scope, Param_Code)
+);
+GO
+
+/* BS_ParamMeta.Param_Code 扩容到 40：Backup.Path.Whitelist 等点分长编码超过 20 字符。
+   新库建表时已是 VARCHAR(40)，此段仅对历史库生效。
+   用固定约束名 UQ_BS_ParamMeta（建表时定义），不用动态 SQL/QUOTENAME——
+   DbUpdater 拆批执行，动态 EXEC 拼接在部分兼容级别上会报“QUOTENAME 附近有语法错误”导致服务起不来。 */
+IF EXISTS (
+    SELECT 1 FROM sys.columns
+    WHERE object_id = OBJECT_ID('dbo.BS_ParamMeta')
+      AND name = 'Param_Code'
+      AND max_length <= 20
+)
+BEGIN
+    IF OBJECT_ID('dbo.UQ_BS_ParamMeta', 'UQ') IS NOT NULL
+        ALTER TABLE dbo.BS_ParamMeta DROP CONSTRAINT UQ_BS_ParamMeta;
+    ALTER TABLE dbo.BS_ParamMeta ALTER COLUMN Param_Code VARCHAR(40) NOT NULL;
+    ALTER TABLE dbo.BS_ParamMeta ADD CONSTRAINT UQ_BS_ParamMeta UNIQUE (Scope, Param_Code);
+END
+GO
+
+IF OBJECT_ID('dbo.BS_ParamBackup', 'U') IS NULL
+CREATE TABLE dbo.BS_ParamBackup (
+    Backup_ID     INT IDENTITY NOT NULL,
+    Scope         VARCHAR(10) NOT NULL,
+    Backup_Name   VARCHAR(100) NOT NULL,
+    Snapshot_Json NVARCHAR(MAX) NOT NULL,
+    Item_Count    INT NOT NULL CONSTRAINT DF_BS_ParamBackup_Count DEFAULT (0),
+    Hash          VARCHAR(64) NULL,
+    Create_User   VARCHAR(20) NULL,
+    Create_Time   DATETIME NOT NULL CONSTRAINT DF_BS_ParamBackup_Time DEFAULT (GETDATE()),
+    Remark        VARCHAR(200) NULL,
+    CONSTRAINT PK_BS_ParamBackup PRIMARY KEY CLUSTERED (Backup_ID)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_IntegrationEndpoint', 'U') IS NULL
+CREATE TABLE dbo.BS_IntegrationEndpoint (
+    ID_KEY              INT IDENTITY NOT NULL,
+    Endpoint_Code       VARCHAR(50) NOT NULL,
+    Endpoint_Name       VARCHAR(100) NOT NULL,
+    Endpoint_Type       VARCHAR(20) NOT NULL,
+    Base_Url            VARCHAR(300) NULL,
+    Auth_Mode           VARCHAR(20) NULL CONSTRAINT DF_BS_Endpoint_Auth DEFAULT ('none'),
+    Config_Json         NVARCHAR(MAX) NULL,
+    Secret_Cipher       NVARCHAR(MAX) NULL,
+    Secret_Updated_Time DATETIME NULL,
+    Timeout_Sec         INT NULL CONSTRAINT DF_BS_Endpoint_Timeout DEFAULT (15),
+    Retry_Count         TINYINT NULL CONSTRAINT DF_BS_Endpoint_Retry DEFAULT (1),
+    Is_Enabled          BIT NOT NULL CONSTRAINT DF_BS_Endpoint_Enabled DEFAULT (1),
+    Health_Status       TINYINT NOT NULL CONSTRAINT DF_BS_Endpoint_Health DEFAULT (0),
+    Last_Check_Time     DATETIME NULL,
+    Last_Check_Message  VARCHAR(500) NULL,
+    Sort_No             INT NULL,
+    Update_User         VARCHAR(20) NULL,
+    Update_Time         DATETIME NOT NULL CONSTRAINT DF_BS_Endpoint_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_IntegrationEndpoint PRIMARY KEY CLUSTERED (ID_KEY),
+    CONSTRAINT UQ_BS_IntegrationEndpoint UNIQUE (Endpoint_Code)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_IntegrationSecretHistory', 'U') IS NULL
+CREATE TABLE dbo.BS_IntegrationSecretHistory (
+    ID_KEY        INT IDENTITY NOT NULL,
+    Endpoint_Code VARCHAR(50) NOT NULL,
+    Secret_Cipher NVARCHAR(MAX) NOT NULL,
+    Change_Reason VARCHAR(200) NULL,
+    Change_User   VARCHAR(20) NULL,
+    Change_Time   DATETIME NOT NULL CONSTRAINT DF_BS_SecretHis_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_IntegrationSecretHistory PRIMARY KEY CLUSTERED (ID_KEY)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_SyncTask', 'U') IS NULL
+CREATE TABLE dbo.BS_SyncTask (
+    Task_ID       INT IDENTITY NOT NULL,
+    Task_Code     VARCHAR(50) NOT NULL,
+    Task_Name     VARCHAR(100) NOT NULL,
+    Task_Type     VARCHAR(30) NOT NULL,
+    Endpoint_Code VARCHAR(50) NULL,
+    Direction     VARCHAR(10) NOT NULL CONSTRAINT DF_BS_SyncTask_Dir DEFAULT ('down'),
+    Cron_Expr     VARCHAR(50) NULL,
+    Batch_Size    INT NULL CONSTRAINT DF_BS_SyncTask_Batch DEFAULT (200),
+    Timeout_Sec   INT NULL CONSTRAINT DF_BS_SyncTask_Timeout DEFAULT (60),
+    Is_Enabled    BIT NOT NULL CONSTRAINT DF_BS_SyncTask_Enabled DEFAULT (1),
+    Last_Run_Time DATETIME NULL,
+    Last_Status   TINYINT NULL,
+    Last_Message  VARCHAR(500) NULL,
+    Next_Run_Time DATETIME NULL,
+    Update_User   VARCHAR(20) NULL,
+    Update_Time   DATETIME NOT NULL CONSTRAINT DF_BS_SyncTask_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_SyncTask PRIMARY KEY CLUSTERED (Task_ID),
+    CONSTRAINT UQ_BS_SyncTask UNIQUE (Task_Code)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_SyncLog', 'U') IS NULL
+CREATE TABLE dbo.BS_SyncLog (
+    ID_KEY        BIGINT IDENTITY NOT NULL,
+    Task_Code     VARCHAR(50) NULL,
+    Sync_Type     VARCHAR(30) NOT NULL,
+    Direction     VARCHAR(10) NULL,
+    Target        VARCHAR(100) NULL,
+    Target_Key    VARCHAR(50) NULL,
+    Status        TINYINT NOT NULL CONSTRAINT DF_BS_SyncLog_Status DEFAULT (0),
+    Message       VARCHAR(1000) NULL,
+    Request_Body  NVARCHAR(MAX) NULL,
+    Response_Body NVARCHAR(MAX) NULL,
+    Retry_Count   INT NOT NULL CONSTRAINT DF_BS_SyncLog_Retry DEFAULT (0),
+    Elapsed       INT NULL,
+    Trace_ID      VARCHAR(36) NULL,
+    Create_Time   DATETIME NOT NULL CONSTRAINT DF_BS_SyncLog_Time DEFAULT (GETDATE()),
+    Finish_Time   DATETIME NULL,
+    CONSTRAINT PK_BS_SyncLog PRIMARY KEY CLUSTERED (ID_KEY)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_MaintJob', 'U') IS NULL
+CREATE TABLE dbo.BS_MaintJob (
+    Job_ID        INT IDENTITY NOT NULL,
+    Job_Type      VARCHAR(30) NOT NULL,
+    Job_Name      VARCHAR(100) NOT NULL,
+    Params_Json   NVARCHAR(MAX) NULL,
+    Status        TINYINT NOT NULL CONSTRAINT DF_BS_MaintJob_Status DEFAULT (0),
+    Progress      INT NOT NULL CONSTRAINT DF_BS_MaintJob_Progress DEFAULT (0),
+    Message       VARCHAR(1000) NULL,
+    Backup_Job_ID INT NULL,
+    Create_User   VARCHAR(20) NULL,
+    Create_Time   DATETIME NOT NULL CONSTRAINT DF_BS_MaintJob_Time DEFAULT (GETDATE()),
+    Start_Time    DATETIME NULL,
+    Finish_Time   DATETIME NULL,
+    Trace_ID      VARCHAR(36) NULL,
+    CONSTRAINT PK_BS_MaintJob PRIMARY KEY CLUSTERED (Job_ID)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_MaintLog', 'U') IS NULL
+CREATE TABLE dbo.BS_MaintLog (
+    ID_KEY   BIGINT IDENTITY NOT NULL,
+    Job_ID   INT NOT NULL,
+    Step     VARCHAR(100) NULL,
+    Message  VARCHAR(1000) NULL,
+    Affected INT NULL,
+    Log_Time DATETIME NOT NULL CONSTRAINT DF_BS_MaintLog_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_MaintLog PRIMARY KEY CLUSTERED (ID_KEY)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_LogPolicy', 'U') IS NULL
+CREATE TABLE dbo.BS_LogPolicy (
+    Policy_ID         INT IDENTITY NOT NULL,
+    Log_Type          VARCHAR(30) NOT NULL,
+    Retain_Days       INT NOT NULL CONSTRAINT DF_BS_LogPolicy_Days DEFAULT (365),
+    Archive_Enabled   BIT NOT NULL CONSTRAINT DF_BS_LogPolicy_Archive DEFAULT (1),
+    Last_Archive_Time DATETIME NULL,
+    Update_User       VARCHAR(20) NULL,
+    Update_Time       DATETIME NOT NULL CONSTRAINT DF_BS_LogPolicy_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_LogPolicy PRIMARY KEY CLUSTERED (Policy_ID),
+    CONSTRAINT UQ_BS_LogPolicy UNIQUE (Log_Type)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_OperLogArchive', 'U') IS NULL
+CREATE TABLE dbo.BS_OperLogArchive (
+    ID_KEY       BIGINT NOT NULL,
+    User_No      VARCHAR(20) NULL,
+    User_Name    VARCHAR(20) NULL,
+    Module       VARCHAR(30) NOT NULL,
+    Action       VARCHAR(30) NOT NULL,
+    Target       VARCHAR(100) NULL,
+    Target_Key   VARCHAR(50) NULL,
+    Before_Value NVARCHAR(MAX) NULL,
+    After_Value  NVARCHAR(MAX) NULL,
+    IP           VARCHAR(45) NULL,
+    User_Agent   VARCHAR(200) NULL,
+    Result       TINYINT NOT NULL,
+    Message      VARCHAR(500) NULL,
+    Trace_ID     VARCHAR(36) NULL,
+    Opt_Time     DATETIME NOT NULL,
+    Archive_Time DATETIME NOT NULL CONSTRAINT DF_BS_OperLogArc_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_OperLogArchive PRIMARY KEY CLUSTERED (ID_KEY, Archive_Time)
+);
+GO
+
+IF OBJECT_ID('dbo.BS_LoginLogArchive', 'U') IS NULL
+CREATE TABLE dbo.BS_LoginLogArchive (
+    ID_KEY       BIGINT NOT NULL,
+    User_No      VARCHAR(20) NULL,
+    Login_Type   VARCHAR(20) NOT NULL,
+    Result       TINYINT NOT NULL,
+    Fail_Reason  VARCHAR(100) NULL,
+    IP           VARCHAR(45) NULL,
+    User_Agent   VARCHAR(200) NULL,
+    Login_Time   DATETIME NOT NULL,
+    Logout_Time  DATETIME NULL,
+    Session_ID   VARCHAR(36) NULL,
+    Archive_Time DATETIME NOT NULL CONSTRAINT DF_BS_LoginLogArc_Time DEFAULT (GETDATE()),
+    CONSTRAINT PK_BS_LoginLogArchive PRIMARY KEY CLUSTERED (ID_KEY, Archive_Time)
+);
+GO
+
+/*---------- 13.3 索引补充（全部 IX_BS_ 前缀，避免与 CS 索引重名） ----------*/
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_SysParam_Code')
+    CREATE INDEX IX_BS_ST_SysParam_Code ON dbo.ST_SysParam (Param_Code);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_Dictionary_Table')
+    CREATE INDEX IX_BS_ST_Dictionary_Table ON dbo.ST_Dictionary (Table_Name, Dict_Id);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_BlackPerson_Card')
+    CREATE INDEX IX_BS_ST_BlackPerson_Card ON dbo.ST_BlackPerson (Card_No, Del_Date DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_SysLog_Time')
+    CREATE INDEX IX_BS_ST_SysLog_Time ON dbo.ST_SysLog (Opt_Time DESC) INCLUDE (User_Name, System_No);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_SysLog_User')
+    CREATE INDEX IX_BS_ST_SysLog_User ON dbo.ST_SysLog (User_Name, Opt_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_OptLog_Time')
+    CREATE INDEX IX_BS_ST_OptLog_Time ON dbo.ST_OptLog (Opt_Time DESC) INCLUDE (User_Name, System_No);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_OptLog_User')
+    CREATE INDEX IX_BS_ST_OptLog_User ON dbo.ST_OptLog (User_Name, Opt_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_OptLog_Table')
+    CREATE INDEX IX_BS_ST_OptLog_Table ON dbo.ST_OptLog (Opt_Table, Opt_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_moc_upload_name_log_Time')
+    CREATE INDEX IX_BS_moc_upload_name_log_Time ON dbo.st_moc_upload_name_log (upload_time DESC, state);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_WX_ApiLog_Time')
+    CREATE INDEX IX_BS_WX_ApiLog_Time ON dbo.WX_ApiLog (Create_Time DESC, Success);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_DC_OrderDataLog_Time')
+    CREATE INDEX IX_BS_DC_OrderDataLog_Time ON dbo.DC_OrderDataLog (Order_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_TrafficLog2201_Time')
+    CREATE INDEX IX_BS_ST_TrafficLog2201_Time ON dbo.ST_TrafficLog2201 (Create_Date DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_XF_CollectLog_Time')
+    CREATE INDEX IX_BS_XF_CollectLog_Time ON dbo.XF_CollectLog (Log_DateTime DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_SyncLog_Time')
+    CREATE INDEX IX_BS_SyncLog_Time ON dbo.BS_SyncLog (Create_Time DESC, Status);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_SyncLog_Task')
+    CREATE INDEX IX_BS_SyncLog_Task ON dbo.BS_SyncLog (Task_Code, Create_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_MaintJob_Status')
+    CREATE INDEX IX_BS_MaintJob_Status ON dbo.BS_MaintJob (Status, Create_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_MaintLog_Job')
+    CREATE INDEX IX_BS_MaintLog_Job ON dbo.BS_MaintLog (Job_ID, Log_Time);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_OperLog_Time')
+    CREATE INDEX IX_BS_OperLog_Time ON dbo.BS_OperLog (Opt_Time DESC);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_LoginLog_Time')
+    CREATE INDEX IX_BS_LoginLog_Time ON dbo.BS_LoginLog (Login_Time DESC, Result);
+GO
+
+/*---------- 13.4 参数元数据种子（第四章 ST 作用域参数） ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'SettleDate')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'SettleDate', N'财务结算日期', 'date', '2006-01-15', N'结算与清理', N'结算截止日期，不得晚于今天');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'ClearDate')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'ClearDate', N'数据清理日期', 'date', '2006-01-15', N'结算与清理', N'不得晚于结算日期');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'PERSON_VALIDTYPE')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'PERSON_VALIDTYPE', N'人员验证方式', 'enum', N'1=黑名单验证;2=红名单验证', '1', N'消费', N'CS 存储过程 ST_pd_GetNameList：1=黑名单(挂失)，2=红名单；默认 1');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'COM')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Restart_Required, Remark)
+    VALUES ('ST', 'COM', N'读卡器串口号', 'string', 'COM1', N'卡务', 1, N'格式 COM+数字，默认 COM1');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'MODE_SF')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Restart_Required, Remark)
+    VALUES ('ST', 'MODE_SF', N'售饭消费模式集合', 'enumSet', '0;1;2;3;4;5;6;255', '0;1;2;3;4;5;6;255', N'消费', 1, N'变更将影响终端，需下发后生效');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'MODE_LH')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Restart_Required, Remark)
+    VALUES ('ST', 'MODE_LH', N'灵活消费模式集合', 'enumSet', '2;3;4;5;6', '2;3;4;5;6', N'消费', 1, N'变更将影响终端，需下发后生效');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsPersonNoAsCardNo')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name)
+    VALUES ('ST', 'IsPersonNoAsCardNo', N'用人员编号作卡号', 'bool', '0;1', '0', N'消费');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'SubsidyInterval')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name)
+    VALUES ('ST', 'SubsidyInterval', N'补贴领取间隔(单位秒)', 'int', '60', '0', '1440', N'补贴');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsAutoReadID')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name)
+    VALUES ('ST', 'IsAutoReadID', N'是否自动读卡', 'bool', '0;1', '1', N'卡务');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'ExpenseIntervalTime')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name)
+    VALUES ('ST', 'ExpenseIntervalTime', N'两次消费间隔(秒)', 'int', '3', '0', '3600', N'消费');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'PeriodBalance')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'PeriodBalance', N'截止时间点余额', 'decimal', '0', N'结算与清理', N'余额口径阈值，非开关；CS 默认 0，用途待现场确认');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'ConsumeHasSubsidy')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name)
+    VALUES ('ST', 'ConsumeHasSubsidy', N'未领补贴不可消费', 'bool', '0;1', '0', N'补贴');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'Repeat.BeginTime')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'Repeat.BeginTime', N'重复消费记录过滤起始时间', 'datetime', N'消费', N'初始化取最大消费时间，无默认值');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'Fake.BeginTime')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'Fake.BeginTime', N'假写卡消费记录过滤起始时间', 'datetime', N'消费', N'初始化取最大消费时间，无默认值');
+/* BS 作用域参数（写入 BS_SysConfig，不进入 CS 参数表） */
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Session.TimeoutMin')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name, Restart_Required)
+    VALUES ('BS', 'Session.TimeoutMin', N'会话超时(分钟)', 'int', '60', '5', '480', N'运行', 1);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Export.MaxRows')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name)
+    VALUES ('BS', 'Export.MaxRows', N'导出上限行数', 'int', '50000', '1000', '200000', N'运行');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Log.RetainDays')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name)
+    VALUES ('BS', 'Log.RetainDays', N'日志保留天数', 'int', '365', '30', '3650', N'运行');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Maintenance.Mode')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Restart_Required, Remark)
+    VALUES ('BS', 'Maintenance.Mode', N'维护模式', 'bool', '0;1', '0', N'运行', 1, N'开启后除维护作业外写接口返回 40904，两小时后自动关闭');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Integration.Timeout')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Min_Value, Max_Value, Group_Name)
+    VALUES ('BS', 'Integration.Timeout', N'集成接口超时(秒)', 'int', '15', '1', '120', N'运行');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'BS' AND Param_Code = 'Backup.Path.Whitelist')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('BS', 'Backup.Path.Whitelist', N'备份路径白名单', 'string', 'D:\Backup;E:\Backup;C:\Backup;\\', N'备份', N'分号分隔的路径前缀，备份目标必须命中其一；留空则回退系统临时目录');
+GO
+
+
+/*===========================================================================
+ 13.4b 参数元数据补充登记（系统参数分组与名称，2026-11-18）
+ 原则：只动 BS_ParamMeta（BS 自有表），不改任何 CS 物理表的 Param_Name。
+ 幂等：全部使用 IF NOT EXISTS 插入，不含任何 UPDATE；
+       需修正名称/选项的参数已直接合并进 13.4 原始种子，避免与已存在行冲突。
+ 说明：Param_Options 支持「值=标签」格式，前端按等号拆分显示中文标签，
+       无等号时按裸值显示，保持对既有 0;1;2;3 的兼容。
+===========================================================================*/
+
+/*---------- 一、新增参数元数据：ST 作用域 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'CORP_NAME')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'CORP_NAME', N'公司名称', 'string', N'基础', N'实际存储于 ST_SysParam，由 XG 初始化脚本写入');
+
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'LastBackupFileDir')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'LastBackupFileDir', N'上次备份备份数据库时的路径', 'string', N'结算与清理', N'标准脚本未预置，如现场库无此编码仅显示不保存');
+
+/*---------- 二、新增参数元数据：DC 订餐作用域（物理表 ST_SysParam，前缀 DC.） ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'DC' AND Param_Code = 'DC.Solution')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('DC', 'DC.Solution', N'订餐模式', 'enum', N'0=消费扣款;1=订餐扣款', '0', N'订餐', N'CS 默认 0');
+
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'DC' AND Param_Code = 'DC.IsUseMOCAsMDC')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('DC', 'DC.IsUseMOCAsMDC', N'实时通讯下，用普通IC卡消费机作为订餐机', 'bool', N'0;1', '0', N'订餐', N'CS 默认 0');
+
+/*---------- 三、新增参数元数据：MJ 门禁作用域（均在 MJ_SysParam 中已核实） ----------*/
+-- 门禁数据清理
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'ABNORM_DAYS')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'ABNORM_DAYS', N'异常刷卡保留天数', 'int', '15', N'门禁数据清理', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'ALARM_DAYS')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'ALARM_DAYS', N'报警事件保留天数', 'int', '15', N'门禁数据清理', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'CLEAR_DATE')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'CLEAR_DATE', N'清理过期数据起始日期', 'date', '2006-07-15', N'门禁数据清理', N'与 XG 作用域同名参数分开登记');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'CLEAR_DAYS')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'CLEAR_DAYS', N'清理数据保留天数', 'int', '30', N'门禁数据清理', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'IS_AUTOCLEAR')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'IS_AUTOCLEAR', N'是否自动清理过期数据', 'bool', N'0;1', '0', N'门禁数据清理', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'NORMAL_DAYS')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'NORMAL_DAYS', N'正常刷卡保留天数', 'int', '7', N'门禁数据清理', NULL);
+
+-- 门禁服务器
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'ACSPORT')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'ACSPORT', N'门禁服务器通讯端口', 'int', '4003', N'门禁服务器', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'ACSSERVER')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'ACSSERVER', N'门禁服务器地址', 'string', '127.0.0.1', N'门禁服务器', NULL);
+
+-- 门禁参数
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'DVSPhotoStoreDir')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('MJ', 'DVSPhotoStoreDir', N'DVS联动拍照图片存储位置', 'string', N'门禁参数', N'CS 默认值为空');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'CARDTOWIGAND26')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'CARDTOWIGAND26', N'是否需要将卡号转换为微耕26格式', 'bool', N'0;1', '0', N'门禁参数', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'ISUSECARD_SN')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'ISUSECARD_SN', N'是否采用IC卡序列号做门禁卡号', 'bool', N'0;1', '0', N'门禁参数', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'LAST_READCARD')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('MJ', 'LAST_READCARD', N'最后一次门禁读头读到的卡号', 'string', N'门禁参数', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'PHOTO_DOORIN')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'PHOTO_DOORIN', N'进门是否显示照片', 'bool', N'0;1', '1', N'门禁参数', NULL);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'PHOTO_DOOROUT')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'PHOTO_DOOROUT', N'出门是否显示照片', 'bool', N'0;1', '1', N'门禁参数', NULL);
+
+/*---------- 四、不登记的编码（已核对 CS 4.2.1 脚本，避免页面显示但保存报 40903） ----------
+  Is_APB / Is_HiddenBack / CANOFFLINE：在 MJ_ExtendFunc 或 ST_MenuInfo 中，属功能开关/菜单，非 MJ_SysParam 参数。
+  CABINET_URL / HasSencondPrice / IDCardLen / IsCheckCodeOnNew / gIsNoUseSmall /
+  gIsWritePersonName / CtrlExt / PICSAVEPATH / SYS.ServicePhone / SYS.ServiceTime /
+  SYS.ServiceWindow：标准脚本未找到，可能来自现场定制库；请先现场核实再手工补登。
+  「子系统代码+CODE」类注册码：按前缀规则动态识别，不逐条登记。
+  分组「未分组」保留不变，代表尚未登记元数据，与「其它」语义不同。
+===========================================================================*/
+GO
+
+/*===========================================================================
+ 13.4c 参数元数据补充登记（26 条复核，2026-11-18）
+ 原则：只动 BS_ParamMeta，全部 IF NOT EXISTS 插入，不含 UPDATE。
+ 说明：参数列表以 CS 物理参数表为准（LoadScope 从 {ScopeDef.Table} 取行），
+       元数据只补名称/分组/类型。标准脚本未预置的编码，现场库有才显示，
+       现场库无则不会出现，登记无副作用。
+===========================================================================*/
+
+/*---------- 一、公共与卡务（ST，物理表 ST_SysParam） ----------*/
+-- 智能柜系统首页
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'CABINET_URL')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'CABINET_URL', N'智能柜系统首页', 'string', N'基础', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- 是否有二次单价
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'HasSencondPrice')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'HasSencondPrice', N'是否有二次单价', 'bool', N'0;1', '0', N'消费', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- ID 读卡位数
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IDCardLen')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'IDCardLen', N'ID读卡位数', 'int', '18', N'卡务', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- 发新卡时是否检查公司加密值
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsCheckCodeOnNew')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'IsCheckCodeOnNew', N'发新卡时是否检查公司加密值', 'bool', N'0;1', '0', N'卡务', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- 是否不采用小金额扇区
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'gIsNoUseSmall')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'gIsNoUseSmall', N'是否不采用小金额扇区(旧编码)', 'bool', N'0;1', '0', N'卡务', N'历史误登记：CS 真实编码为 IsNoUseSmall，此项仅现场库存在旧编码时才显示');
+
+-- 是否写入人员姓名到 IC 卡中
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'gIsWritePersonName')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'gIsWritePersonName', N'是否写入人员姓名到IC卡中(旧编码)', 'bool', N'0;1', '0', N'卡务', N'历史误登记：CS 真实编码为 IsWritePersonName，此项仅现场库存在旧编码时才显示');
+
+/*---------- 二、单位与客服信息（ST，与 CORP_NAME 同组，解决分组割裂） ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'SYS.ServicePhone')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'SYS.ServicePhone', N'客服电话', 'string', N'基础', N'与 CORP_NAME 同组；标准脚本未预置');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'SYS.ServiceTime')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'SYS.ServiceTime', N'客服服务时间', 'string', N'基础', N'与 CORP_NAME 同组；标准脚本未预置');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'SYS.ServiceWindow')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('ST', 'SYS.ServiceWindow', N'客服窗口', 'string', N'基础', N'与 CORP_NAME 同组；标准脚本未预置');
+
+/*---------- 三、门禁参数（MJ，物理表 MJ_SysParam） ----------*/
+-- 是否门禁一体机
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'CtrlExt')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'CtrlExt', N'是否门禁一体机', 'bool', N'0;1', '0', N'门禁参数', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- 防尾随（CS MJ_SysParam 原名「防尾随」，默认 1）
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'Is_APB')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'Is_APB', N'是否启用防尾随', 'bool', N'0;1', '1', N'门禁参数', N'CS MJ_SysParam 已有此编码（另在 MJ_ExtendFunc 有同名开关）');
+
+-- 防潜回（CS MJ_SysParam 原名「防潜回」，默认 1）
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'Is_HiddenBack')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'Is_HiddenBack', N'是否启用防潜回', 'bool', N'0;1', '1', N'门禁参数', N'CS MJ_SysParam 已有此编码');
+
+-- 脱机时是否允许开门
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'CANOFFLINE')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('MJ', 'CANOFFLINE', N'脱机时是否允许开门', 'bool', N'0;1', '0', N'门禁参数', N'标准脚本未预置，现场库有此编码时才显示');
+
+-- 照片存储路径
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'MJ' AND Param_Code = 'PICSAVEPATH')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Group_Name, Remark)
+    VALUES ('MJ', 'PICSAVEPATH', N'照片存储路径', 'string', N'门禁参数', N'标准脚本未预置，现场库有此编码时才显示');
+
+/*---------- 四、子系统注册码（*_CODE）：由后端按前缀动态命名，不逐条登记 ----------
+  后端 ParamsController.Merge / BsParamsController.Merge 增加兜底规则：
+  Param_Code 以 _CODE 结尾且无元数据时，名称显示为「<子系统中文名>注册码」，
+  分组归入「授权与注册」。例如 KQ_CODE -> 考勤注册码、MJ_CODE -> 门禁注册码。
+  这样现场库新增子系统注册码时无需改种子数据。
+===========================================================================*/
+GO
+
+
+
+/*---------- 13.4d 卡务类参数补充登记（CS 源码确认真实编码） ----------*/
+/* IsNoUseSmall/IsWritePersonName/IsShowTakeAll 均为 ST_SysParam 中 Param_Code，
+   源码 udmST.pas、uWriteCard.pas、uTakeFund.pas 通过 Param_Code 读取，归卡务组。 */
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsNoUseSmall')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'IsNoUseSmall', N'是否不采用小金额扇区', 'bool', '0;1', '0', N'卡务', N'CS udmST.pas：Param_Code=IsNoUseSmall，1=不采用小金额扇区');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsWritePersonName')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'IsWritePersonName', N'是否写入人员姓名', 'bool', '0;1', '0', N'卡务', N'CS uWriteCard.pas：Param_Name=IsWritePersonName，1=写姓名到IC卡');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_ParamMeta WHERE Scope = 'ST' AND Param_Code = 'IsShowTakeAll')
+    INSERT INTO dbo.BS_ParamMeta (Scope, Param_Code, Param_Name, Param_Type, Param_Options, Default_Value, Group_Name, Remark)
+    VALUES ('ST', 'IsShowTakeAll', N'是否显示全部取款', 'bool', '0;1', '0', N'卡务', N'CS uTakeFund.pas：IsShowTakeAll=1 时显示取款全部按钮');
+
+/*---------- 13.5 集成端点、同步任务、日志策略种子 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'DB_MAIN')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('DB_MAIN', N'主数据库', 'database', 'basic', 1);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'MOC_API')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('MOC_API', N'5501 设备接口服务', 'http', 'none', 2);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'MOC_SVR')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('MOC_SVR', N'消费与考勤服务', 'http', 'basic', 3);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'MOC_WS')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('MOC_WS', N'设备 WebSocket', 'http', 'none', 4);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'WX_MP')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('WX_MP', N'微信公众号', 'wechat', 'oauth', 5);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'WX_MINI')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('WX_MINI', N'微信小程序', 'wechat', 'oauth', 6);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'WX_PAY')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('WX_PAY', N'微信支付', 'payment', 'cert', 7);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'ALI_SMS')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('ALI_SMS', N'阿里云短信', 'sms', 'apikey', 8);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'VISITOR_QR')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('VISITOR_QR', N'访客二维码', 'http', 'sign', 9);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_IntegrationEndpoint WHERE Endpoint_Code = 'ST_API')
+    INSERT INTO dbo.BS_IntegrationEndpoint (Endpoint_Code, Endpoint_Name, Endpoint_Type, Auth_Mode, Sort_No)
+    VALUES ('ST_API', N'对外标准接口', 'http', 'apikey', 10);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'PERSON_NAME_DOWN')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('PERSON_NAME_DOWN', N'人员名单下发', 'person', 'MOC_API', 'down', 200);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'CARD_INFO_DOWN')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('CARD_INFO_DOWN', N'卡信息下发', 'card', 'MOC_API', 'down', 200);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'FACE_INDEX_DOWN')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('FACE_INDEX_DOWN', N'人脸特征索引下发', 'face', 'MOC_API', 'down', 100);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'ACCESS_RIGHT_DOWN')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('ACCESS_RIGHT_DOWN', N'门禁权限下发', 'access', 'MOC_API', 'down', 200);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'CONSUME_UP')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('CONSUME_UP', N'消费流水采集', 'person', 'MOC_SVR', 'up', 500);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'ATTENDANCE_UP')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('ATTENDANCE_UP', N'考勤流水采集', 'attendance', 'MOC_SVR', 'up', 500);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'ORDER_DOWN')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('ORDER_DOWN', N'订餐订单下发', 'order', 'MOC_API', 'down', 200);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'WX_RECONCILE')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('WX_RECONCILE', N'微信订单对账', 'wechat', 'WX_PAY', 'up', 100);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'SMS_SEND')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('SMS_SEND', N'短信发送', 'sms', 'ALI_SMS', 'down', 100);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SyncTask WHERE Task_Code = 'LOG_ARCHIVE')
+    INSERT INTO dbo.BS_SyncTask (Task_Code, Task_Name, Task_Type, Endpoint_Code, Direction, Batch_Size)
+    VALUES ('LOG_ARCHIVE', N'日志归档', 'system', 'DB_MAIN', 'up', 500);
+GO
+
+-- 迁移：历史库的 LOG_ARCHIVE 未绑定端点，补挂到 DB_MAIN，使其能在"接口与集成"页显示并执行。
+-- 仅补 Endpoint_Code IS NULL 的记录，不覆盖现场已绑定的值；可反复执行。
+UPDATE dbo.BS_SyncTask
+   SET Endpoint_Code = 'DB_MAIN', Update_Time = GETDATE()
+ WHERE Task_Code = 'LOG_ARCHIVE' AND Endpoint_Code IS NULL;
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_LogPolicy WHERE Log_Type = 'OPER')
+    INSERT INTO dbo.BS_LogPolicy (Log_Type, Retain_Days, Archive_Enabled) VALUES ('OPER', 1095, 1);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_LogPolicy WHERE Log_Type = 'LOGIN')
+    INSERT INTO dbo.BS_LogPolicy (Log_Type, Retain_Days, Archive_Enabled) VALUES ('LOGIN', 365, 1);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_LogPolicy WHERE Log_Type = 'SYNC')
+    INSERT INTO dbo.BS_LogPolicy (Log_Type, Retain_Days, Archive_Enabled) VALUES ('SYNC', 180, 1);
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_LogPolicy WHERE Log_Type = 'SYSTEM')
+    INSERT INTO dbo.BS_LogPolicy (Log_Type, Retain_Days, Archive_Enabled) VALUES ('SYSTEM', 365, 1);
+GO
+
+/*---------- 13.6 菜单、权限位、权限码映射 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = 900910)
+    INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+    VALUES (900910, 'BS', 'BS_SYSCONFIG', N'系统配置', 9009, 1, NULL, 10);
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = 900920)
+    INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+    VALUES (900920, 'BS', 'BS_SECAUDIT', N'安全审计', 9009, 1, NULL, 11);
+GO
+
+DECLARE @Pages TABLE (
+    Menu_ID    INT NOT NULL,
+    Menu_No    VARCHAR(20) NOT NULL,
+    Menu_Name  NVARCHAR(20) NOT NULL,
+    Form_Name  VARCHAR(50) NOT NULL,
+    Parent_ID  INT NOT NULL,
+    Menu_Index TINYINT NOT NULL
+);
+INSERT INTO @Pages (Menu_ID, Menu_No, Menu_Name, Form_Name, Parent_ID, Menu_Index) VALUES
+    (900911, 'BS_SYS_PARAM',       N'系统参数',   '/system/param',       900910, 1),
+    (900912, 'BS_SYS_DICT',        N'数据字典',   '/system/dict',        900910, 2),
+    (900913, 'BS_SYS_INTEGRATION', N'接口与集成', '/system/integration', 900910, 3),
+    (900914, 'BS_SYS_MAINTAIN',    N'数据维护',   '/system/maintain',    900910, 4),
+    (900915, 'BS_SYS_BLACKLIST',   N'黑名单管理', '/system/blacklist',   900910, 5),
+    (900921, 'BS_LOG_SYSTEM',      N'系统日志',   '/system/log/system',  900920, 1),
+    (900922, 'BS_LOG_LOGIN',       N'登录日志',   '/system/log/login',   900920, 2),
+    (900923, 'BS_LOG_OPER',        N'操作审计',   '/system/log/oper',    900920, 3),
+    (900924, 'BS_LOG_SYNC',        N'同步日志',   '/system/log/sync',    900920, 4);
+
+DECLARE @PageRights TABLE (
+    Menu_ID         INT NOT NULL,
+    Right_ID        CHAR(1) NOT NULL,
+    Right_Name      NVARCHAR(20) NOT NULL,
+    Permission_Code VARCHAR(64) NOT NULL,
+    Sort_No         TINYINT NOT NULL
+);
+INSERT INTO @PageRights (Menu_ID, Right_ID, Right_Name, Permission_Code, Sort_No) VALUES
+    (900911, '0', N'查看',     'system:param:view',    1),
+    (900911, '2', N'修改',     'system:param:update',  2),
+    (900911, '6', N'备份',     'system:param:backup',  3),
+    (900911, '7', N'恢复默认', 'system:param:restore', 4),
+    (900911, '8', N'导入',     'system:param:import',  5),
+    (900911, '4', N'导出',     'system:param:export',  6),
+    (900912, '0', N'查看',     'system:dict:view',     1),
+    (900912, '1', N'新增',     'system:dict:create',   2),
+    (900912, '2', N'修改',     'system:dict:update',   3),
+    (900912, '3', N'删除',     'system:dict:delete',   4),
+    (900912, '9', N'同步',     'system:dict:sync',     5),
+    (900912, '4', N'导出',     'system:dict:export',   6),
+    (900913, '0', N'查看',     'system:integration:view',   1),
+    (900913, '2', N'修改',     'system:integration:update', 2),
+    (900913, '5', N'连通测试', 'system:integration:test',   3),
+    (900913, '7', N'启停',     'system:integration:toggle', 4),
+    (900914, '0', N'查看',     'system:maintain:view',    1),
+    (900914, '6', N'备份',     'system:maintain:backup',  2),
+    (900914, '1', N'整理',     'system:maintain:rebuild', 3),
+    (900914, '3', N'清理',     'system:maintain:cleanup', 4),
+    (900914, '5', N'执行',     'system:maintain:execute', 5),
+    (900915, '0', N'查看',     'system:blacklist:view',   1),
+    (900915, '1', N'加入',     'system:blacklist:create', 2),
+    (900915, '3', N'释放',     'system:blacklist:delete', 3),
+    (900915, '4', N'导出',     'system:blacklist:export', 4),
+    (900921, '0', N'查看',     'system:log:system',        1),
+    (900921, '4', N'导出',     'system:log:system:export', 2),
+    (900922, '0', N'查看',     'system:log:login',         1),
+    (900922, '4', N'导出',     'system:log:login:export',  2),
+    (900923, '0', N'查看',     'system:log:oper',          1),
+    (900923, '4', N'导出',     'system:log:oper:export',   2),
+    (900924, '0', N'查看',     'system:log:sync',          1),
+    (900924, '4', N'导出',     'system:log:sync:export',   2),
+    (900924, '5', N'重试',     'system:log:sync:retry',    3);
+
+DECLARE @MenuId INT, @MenuNo VARCHAR(20), @MenuName NVARCHAR(20), @FormName VARCHAR(50), @Parent INT, @MenuIndex TINYINT;
+DECLARE @RightId CHAR(1), @RightName NVARCHAR(20), @Code VARCHAR(64);
+DECLARE @Rights VARCHAR(20);
+
+DECLARE page_cursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT Menu_ID, Menu_No, Menu_Name, Form_Name, Parent_ID, Menu_Index FROM @Pages ORDER BY Menu_ID;
+OPEN page_cursor;
+FETCH NEXT FROM page_cursor INTO @MenuId, @MenuNo, @MenuName, @FormName, @Parent, @MenuIndex;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = @MenuId)
+        INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+        VALUES (@MenuId, 'BS', @MenuNo, @MenuName, @Parent, 1, @FormName, @MenuIndex);
+
+    SELECT @Rights = STUFF((
+        SELECT ',' + Right_ID FROM @PageRights WHERE Menu_ID = @MenuId ORDER BY Right_ID FOR XML PATH('')
+    ), 1, 1, '');
+    SET @Rights = REPLACE(ISNULL(@Rights, ''), ',', '');
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightInfo WHERE Menu_ID = @MenuId)
+        INSERT INTO dbo.ST_RightInfo (Menu_ID, Form_Name, Right_Values, Remark)
+        VALUES (@MenuId, @MenuNo, @Rights, N'BS系统配置与安全审计权限位');
+    ELSE
+        UPDATE dbo.ST_RightInfo SET Right_Values = @Rights WHERE Menu_ID = @MenuId;
+
+    DECLARE right_cursor CURSOR LOCAL FAST_FORWARD FOR
+        SELECT Right_ID, Right_Name, Permission_Code FROM @PageRights WHERE Menu_ID = @MenuId ORDER BY Sort_No;
+    OPEN right_cursor;
+    FETCH NEXT FROM right_cursor INTO @RightId, @RightName, @Code;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightValue WHERE Right_ID = @RightId AND Form_Name = @MenuNo)
+            INSERT INTO dbo.ST_RightValue (Right_ID, Form_Name, Right_Name)
+            VALUES (@RightId, @MenuNo, @RightName);
+        IF NOT EXISTS (SELECT 1 FROM dbo.BS_RightCodeMap WHERE Menu_ID = @MenuId AND Right_ID = @RightId)
+            INSERT INTO dbo.BS_RightCodeMap (Menu_ID, Right_ID, Permission_Code, Api_Route, Remark)
+            VALUES (@MenuId, @RightId, @Code, NULL, N'BS系统配置与安全审计权限码');
+        FETCH NEXT FROM right_cursor INTO @RightId, @RightName, @Code;
+    END
+    CLOSE right_cursor;
+    DEALLOCATE right_cursor;
+
+    IF EXISTS (SELECT 1 FROM dbo.ST_RoleInfo WHERE Role_No = 'Administrators')
+    BEGIN
+        IF EXISTS (SELECT 1 FROM dbo.ST_RoleRight WHERE Role_No = 'Administrators' AND Menu_ID = @MenuId)
+            UPDATE dbo.ST_RoleRight SET Right_Values = @Rights
+            WHERE Role_No = 'Administrators' AND Menu_ID = @MenuId;
+        ELSE
+            INSERT INTO dbo.ST_RoleRight (Role_No, Menu_ID, Right_Values)
+            VALUES ('Administrators', @MenuId, @Rights);
+    END
+
+    FETCH NEXT FROM page_cursor INTO @MenuId, @MenuNo, @MenuName, @FormName, @Parent, @MenuIndex;
+END
+CLOSE page_cursor;
+DEALLOCATE page_cursor;
+GO
+
+/*---------- 13.7 运行配置初始化 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Config.Version')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Config.Version', '1', N'系统配置版本，参数/字典/端点变更后自增');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Maintenance.Mode')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Maintenance.Mode', '0', N'维护模式：0 关闭、1 开启');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Maintenance.Mode.Until')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Maintenance.Mode.Until', '', N'维护模式自动关闭时间');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Backup.Path.Whitelist')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Backup.Path.Whitelist', 'D:\Backup;E:\Backup;C:\Backup;\\', N'备份目标路径白名单，分号分隔');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Config.CipherKey')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Config.CipherKey', '', N'集成密钥加密材料（Base64，优先取环境变量 BS_CONFIG_KEY）');
+GO
+
+/*=====================================================================
+  14. 卡务中心-人员与组织：扩展表、索引、菜单与权限（可重复执行）
+  依据《人脸通BS系统-卡务中心-人员与组织详细设计文档》第九章
+  原则：只增不删，主数据仍写 CS 既有表，扩展信息写 BS_ 表
+=====================================================================*/
+
+/*---------- 14.1 新增表 ----------*/
+IF OBJECT_ID('dbo.BS_PersonExt', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_PersonExt (
+        Person_ID            INT NOT NULL,
+        BS_Source            VARCHAR(20) NULL CONSTRAINT DF_BS_PersonExt_Source DEFAULT ('BS'),
+        BS_Import_Batch      VARCHAR(36) NULL,
+        BS_Face_Status       TINYINT NOT NULL CONSTRAINT DF_BS_PersonExt_Face DEFAULT (0),
+        BS_Photo_Review_User VARCHAR(20) NULL,
+        BS_Photo_Review_Time DATETIME NULL,
+        BS_Photo_Review_Reason NVARCHAR(200) NULL,
+        BS_Create_User       VARCHAR(20) NULL,
+        BS_Create_Time       DATETIME NULL,
+        BS_Update_User       VARCHAR(20) NULL,
+        BS_Update_Time       DATETIME NULL,
+        CONSTRAINT PK_BS_PersonExt PRIMARY KEY CLUSTERED (Person_ID)
+    )
+END
+GO
+
+/* 驳回原因：老库补列，可重复执行 */
+IF COL_LENGTH('dbo.BS_PersonExt', 'BS_Photo_Review_Reason') IS NULL
+    ALTER TABLE dbo.BS_PersonExt ADD BS_Photo_Review_Reason NVARCHAR(200) NULL;
+GO
+
+IF OBJECT_ID('dbo.BS_PhotoHistory', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_PhotoHistory (
+        ID_KEY      BIGINT IDENTITY NOT NULL,
+        Person_ID   INT NOT NULL,
+        Photo       VARBINARY(MAX) NULL,
+        Id_Photo    VARBINARY(MAX) NULL,
+        Create_User VARCHAR(20) NULL,
+        Create_Time DATETIME NOT NULL CONSTRAINT DF_BS_PhotoHistory_Time DEFAULT (GETDATE()),
+        Remark      VARCHAR(200) NULL,
+        CONSTRAINT PK_BS_PhotoHistory PRIMARY KEY CLUSTERED (ID_KEY)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_ImportJob', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_ImportJob (
+        Job_ID       BIGINT IDENTITY NOT NULL,
+        Job_Type     VARCHAR(20) NOT NULL CONSTRAINT DF_BS_ImportJob_Type DEFAULT ('PERSON'),
+        File_Name    VARCHAR(200) NULL,
+        File_Hash    VARCHAR(64) NULL,
+        Mode         VARCHAR(20) NULL CONSTRAINT DF_BS_ImportJob_Mode DEFAULT ('CREATE'),
+        Status       TINYINT NOT NULL CONSTRAINT DF_BS_ImportJob_Status DEFAULT (0),
+        Total_Rows   INT NOT NULL CONSTRAINT DF_BS_ImportJob_Total DEFAULT (0),
+        Success_Rows INT NOT NULL CONSTRAINT DF_BS_ImportJob_Success DEFAULT (0),
+        Fail_Rows    INT NOT NULL CONSTRAINT DF_BS_ImportJob_Fail DEFAULT (0),
+        Skip_Rows    INT NOT NULL CONSTRAINT DF_BS_ImportJob_Skip DEFAULT (0),
+        Options_Json NVARCHAR(MAX) NULL,
+        Error_File   VARCHAR(300) NULL,
+        Create_User  VARCHAR(20) NULL,
+        Create_Time  DATETIME NOT NULL CONSTRAINT DF_BS_ImportJob_Time DEFAULT (GETDATE()),
+        Finish_Time  DATETIME NULL,
+        CONSTRAINT PK_BS_ImportJob PRIMARY KEY CLUSTERED (Job_ID)
+    )
+END
+GO
+
+IF OBJECT_ID('dbo.BS_ImportRow', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.BS_ImportRow (
+        ID_KEY        BIGINT IDENTITY NOT NULL,
+        Job_ID        BIGINT NOT NULL,
+        Row_No        INT NOT NULL,
+        Person_No     VARCHAR(20) NULL,
+        Card_No       VARCHAR(12) NULL,
+        Person_Name   VARCHAR(20) NULL,
+        Action        VARCHAR(20) NULL,
+        Status        TINYINT NOT NULL CONSTRAINT DF_BS_ImportRow_Status DEFAULT (0),
+        Error_Code    VARCHAR(20) NULL,
+        Error_Message VARCHAR(500) NULL,
+        Person_ID     INT NULL,
+        Raw_Json      NVARCHAR(MAX) NULL,
+        Create_Time   DATETIME NOT NULL CONSTRAINT DF_BS_ImportRow_Time DEFAULT (GETDATE()),
+        CONSTRAINT PK_BS_ImportRow PRIMARY KEY CLUSTERED (ID_KEY)
+    )
+END
+GO
+
+/*---------- 14.2 索引补充 ----------*/
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_Person_Dept' AND object_id = OBJECT_ID('ST_Person'))
+    CREATE INDEX IX_BS_ST_Person_Dept ON dbo.ST_Person (Dept_ID, Is_Del)
+        INCLUDE (Person_No, Person_Name, Card_No, mobile);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_Person_Name' AND object_id = OBJECT_ID('ST_Person'))
+    CREATE INDEX IX_BS_ST_Person_Name ON dbo.ST_Person (Person_Name);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_PersonPhoto_Update' AND object_id = OBJECT_ID('ST_PersonPhoto'))
+    CREATE INDEX IX_BS_ST_PersonPhoto_Update ON dbo.ST_PersonPhoto (update_time DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ST_Dictionary_Table' AND object_id = OBJECT_ID('ST_Dictionary'))
+    CREATE INDEX IX_BS_ST_Dictionary_Table ON dbo.ST_Dictionary (Table_Name, Dict_Id);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_PhotoHistory_Person' AND object_id = OBJECT_ID('BS_PhotoHistory'))
+    CREATE INDEX IX_BS_PhotoHistory_Person ON dbo.BS_PhotoHistory (Person_ID, Create_Time DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ImportJob_Time' AND object_id = OBJECT_ID('BS_ImportJob'))
+    CREATE INDEX IX_BS_ImportJob_Time ON dbo.BS_ImportJob (Create_Time DESC, Status);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_ImportRow_Job' AND object_id = OBJECT_ID('BS_ImportRow'))
+    CREATE INDEX IX_BS_ImportRow_Job ON dbo.BS_ImportRow (Job_ID, Status);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_PersonExt_Face' AND object_id = OBJECT_ID('BS_PersonExt'))
+    CREATE INDEX IX_BS_PersonExt_Face ON dbo.BS_PersonExt (BS_Face_Status);
+GO
+
+/*---------- 14.3 卡务中心菜单 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo WHERE Menu_ID = 9001)
+    INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+    VALUES (9001, 'BS', 'BS_CARD', N'卡务中心', 9000, 1, NULL, 10);
+GO
+
+DECLARE @CardPages TABLE (
+    Menu_ID INT NOT NULL,
+    Menu_No VARCHAR(20) NOT NULL,
+    Menu_Name NVARCHAR(20) NOT NULL,
+    Form_Name VARCHAR(50) NOT NULL,
+    Menu_Index TINYINT NOT NULL
+);
+INSERT INTO @CardPages (Menu_ID, Menu_No, Menu_Name, Form_Name, Menu_Index) VALUES
+    (910101, 'BS_CARD_PERSON', N'人员档案',      '/card/person', 1),
+    (910102, 'BS_CARD_DEPT',   N'部门档案',      '/card/dept',   2),
+    (910103, 'BS_CARD_CODE',   N'编码管理',      '/card/code',   3),
+    (910104, 'BS_CARD_FACE',   N'人脸照片库',    '/card/face',   4),
+    (910105, 'BS_CARD_IMPORT', N'人员导入导出',  '/card/import', 5);
+
+INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+SELECT p.Menu_ID, 'BS', p.Menu_No, p.Menu_Name, 9001, 1, p.Form_Name, p.Menu_Index
+  FROM @CardPages p
+ WHERE NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo m WHERE m.Menu_ID = p.Menu_ID);
+GO
+
+/*---------- 14.4 权限位与权限码映射 ----------*/
+DECLARE @CardRights TABLE (
+    Menu_ID INT NOT NULL,
+    Right_ID CHAR(1) NOT NULL,
+    Right_Name NVARCHAR(20) NOT NULL,
+    Permission_Code VARCHAR(64) NOT NULL,
+    Sort_No TINYINT NOT NULL
+);
+INSERT INTO @CardRights (Menu_ID, Right_ID, Right_Name, Permission_Code, Sort_No) VALUES
+    (9001,   '0', N'查看',     'card:view',                1),
+    (910101, '0', N'查看',     'card:person:view',         1),
+    (910101, '1', N'新增',     'card:person:create',       2),
+    (910101, '2', N'修改',     'card:person:update',       3),
+    (910101, '3', N'注销',     'card:person:delete',       4),
+    (910101, '4', N'导出',     'card:person:export',       5),
+    (910101, '5', N'照片维护', 'card:person:photo',        6),
+    (910101, '6', N'敏感字段', 'card:person:sensitive',    7),
+    (910102, '0', N'查看',     'card:dept:view',           1),
+    (910102, '1', N'新增',     'card:dept:create',         2),
+    (910102, '2', N'修改',     'card:dept:update',         3),
+    (910102, '3', N'停用',     'card:dept:delete',         4),
+    (910102, '4', N'导出',     'card:dept:export',         5),
+    (910103, '0', N'查看',     'card:code:view',           1),
+    (910103, '1', N'新增',     'card:code:create',         2),
+    (910103, '2', N'修改',     'card:code:update',         3),
+    (910103, '3', N'删除',     'card:code:delete',         4),
+    (910104, '0', N'查看',     'card:face:view',           1),
+    (910104, '1', N'上传',     'card:face:upload',         2),
+    (910104, '2', N'审核',     'card:face:review',         3),
+    (910104, '3', N'删除',     'card:face:delete',         4),
+    (910104, '4', N'导出原图', 'card:face:export',         5),
+    (910105, '0', N'查看',     'card:import:view',         1),
+    (910105, '1', N'导入',     'card:import:import',       2),
+    (910105, '2', N'导出',     'card:import:export',       3),
+    (910105, '3', N'下载模板', 'card:import:template',     4),
+    (910105, '4', N'失败重试', 'card:import:retry',        5);
+
+DECLARE @MenuId INT, @MenuNo VARCHAR(20), @Rights VARCHAR(20);
+DECLARE @RightId CHAR(1), @RightName NVARCHAR(20), @Code VARCHAR(64);
+
+DECLARE right_cursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT Menu_ID, Right_ID, Right_Name, Permission_Code FROM @CardRights ORDER BY Menu_ID, Sort_No;
+OPEN right_cursor;
+FETCH NEXT FROM right_cursor INTO @MenuId, @RightId, @RightName, @Code;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    SELECT @MenuNo = Menu_No FROM dbo.ST_MenuInfo WHERE Menu_ID = @MenuId;
+
+    IF @MenuNo IS NOT NULL
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightValue WHERE Right_ID = @RightId AND Form_Name = @MenuNo)
+            INSERT INTO dbo.ST_RightValue (Right_ID, Form_Name, Right_Name)
+            VALUES (@RightId, @MenuNo, @RightName);
+
+        IF NOT EXISTS (SELECT 1 FROM dbo.BS_RightCodeMap WHERE Menu_ID = @MenuId AND Right_ID = @RightId)
+            INSERT INTO dbo.BS_RightCodeMap (Menu_ID, Right_ID, Permission_Code, Api_Route, Remark)
+            VALUES (@MenuId, @RightId, @Code, NULL, N'BS卡务中心人员与组织权限码');
+    END
+
+    FETCH NEXT FROM right_cursor INTO @MenuId, @RightId, @RightName, @Code;
+END
+CLOSE right_cursor;
+DEALLOCATE right_cursor;
+
+/* 汇总每个菜单的权限位字符串 */
+UPDATE ri
+   SET ri.Right_Values = x.Rights
+  FROM dbo.ST_RightInfo ri
+  JOIN (
+        SELECT Menu_ID, STUFF((SELECT '' + r.Right_ID
+                                 FROM @CardRights r
+                                WHERE r.Menu_ID = c.Menu_ID
+                                ORDER BY r.Right_ID
+                                FOR XML PATH('')), 1, 0, '') AS Rights
+          FROM @CardRights c
+         GROUP BY c.Menu_ID
+       ) x ON x.Menu_ID = ri.Menu_ID;
+
+INSERT INTO dbo.ST_RightInfo (Menu_ID, Form_Name, Right_Values, Remark)
+SELECT x.Menu_ID, m.Menu_No, x.Rights, N'BS卡务中心人员与组织权限位'
+  FROM (
+        SELECT Menu_ID, STUFF((SELECT '' + r.Right_ID
+                                 FROM @CardRights r
+                                WHERE r.Menu_ID = c.Menu_ID
+                                ORDER BY r.Right_ID
+                                FOR XML PATH('')), 1, 0, '') AS Rights
+          FROM @CardRights c
+         GROUP BY c.Menu_ID
+       ) x
+  JOIN dbo.ST_MenuInfo m ON m.Menu_ID = x.Menu_ID
+ WHERE NOT EXISTS (SELECT 1 FROM dbo.ST_RightInfo ri WHERE ri.Menu_ID = x.Menu_ID);
+
+/* 管理员角色默认拥有全部卡务权限位 */
+UPDATE rr
+   SET rr.Right_Values = ri.Right_Values
+  FROM dbo.ST_RoleRight rr
+  JOIN dbo.ST_RightInfo ri ON ri.Menu_ID = rr.Menu_ID
+ WHERE rr.Role_No = 'Administrators'
+   AND ri.Menu_ID IN (9001, 910101, 910102, 910103, 910104, 910105)
+   AND ISNULL(rr.Right_Values, '') <> ri.Right_Values;
+
+INSERT INTO dbo.ST_RoleRight (Role_No, Menu_ID, Right_Values)
+SELECT 'Administrators', ri.Menu_ID, ri.Right_Values
+  FROM dbo.ST_RightInfo ri
+ WHERE ri.Menu_ID IN (9001, 910101, 910102, 910103, 910104, 910105)
+   AND NOT EXISTS (SELECT 1 FROM dbo.ST_RoleRight rr WHERE rr.Role_No = 'Administrators' AND rr.Menu_ID = ri.Menu_ID);
+GO
+
+/*---------- 14.5 配置项 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'PersonNo.DefaultPrefix')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('PersonNo.DefaultPrefix', 'P', N'人员编号默认前缀，仅在库中无编号时使用');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'PersonNo.DefaultWidth')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('PersonNo.DefaultWidth', '6', N'人员编号数字位宽，仅在库中无编号时使用');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Dept.RootPrefix')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Dept.RootPrefix', '10', N'新增根部门编号前缀，留空则取现有最顶层编号前两位');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Face.DetectEnabled')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Face.DetectEnabled', '0', N'照片人脸检测开关：1 开启、0 关闭（关闭时仅做格式与尺寸校验）');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Face.ImportZipLimitMb')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Face.ImportZipLimitMb', '100', N'照片批量导入 ZIP 包大小上限（MB）');
+GO
+
+/*==============================================================================
+  第 15 节  卡务中心 - 账户与卡
+  依据《人脸通BS系统-卡务中心-账户与卡详细设计文档》
+  - 只增不删：不修改、不重命名、不删除 CS 既有对象
+  - 权威数据仍写 ST_Card / ST_CardType / ST_CardInfo / ST_LockCard 等 CS 表
+  - 本模块只新增 BS_CardExt（扩展状态）与 BS_CardLog（动作审计）两张表
+  - 脚本幂等，可重复执行
+==============================================================================*/
+
+/*---------- 15.1 新增表 ----------*/
+IF OBJECT_ID('dbo.BS_CardExt', 'U') IS NULL
+    CREATE TABLE dbo.BS_CardExt (
+        Person_ID           INT           NOT NULL,
+        Card_No             VARCHAR(12)   NULL,
+        Last_Op_Type        VARCHAR(20)   NULL,
+        Last_Op_Time        DATETIME      NULL,
+        Last_Op_User        VARCHAR(20)   NULL,
+        Lock_Reason_Code    VARCHAR(20)   NULL,
+        Lock_Reason_Text    VARCHAR(100)  NULL,
+        Lock_Time           DATETIME      NULL,
+        Pwd_Fail_Count      INT           NOT NULL CONSTRAINT DF_BS_CardExt_Fail DEFAULT (0),
+        Pwd_Lock_Until      DATETIME      NULL,
+        Is_System_Frozen    BIT           NOT NULL CONSTRAINT DF_BS_CardExt_SysFrozen DEFAULT (0),
+        Remark              VARCHAR(200)  NULL,
+        Create_Time         DATETIME      NOT NULL CONSTRAINT DF_BS_CardExt_Create DEFAULT (GETDATE()),
+        Update_Time         DATETIME      NULL,
+        CONSTRAINT PK_BS_CardExt PRIMARY KEY CLUSTERED (Person_ID ASC)
+    );
+GO
+
+IF OBJECT_ID('dbo.BS_CardLog', 'U') IS NULL
+    CREATE TABLE dbo.BS_CardLog (
+        ID_KEY          BIGINT IDENTITY(1,1) NOT NULL,
+        Person_ID       INT           NOT NULL,
+        Card_No         VARCHAR(12)   NULL,
+        New_Card_No     VARCHAR(12)   NULL,
+        Op_Type         VARCHAR(20)   NOT NULL,
+        Before_State    TINYINT       NULL,
+        After_State     TINYINT       NULL,
+        Amount_Balance  MONEY         NULL,
+        Amount_Small    MONEY         NULL,
+        Amount_Foregift MONEY         NULL,
+        Amount_Charge   MONEY         NULL,
+        Refund_Amount   MONEY         NULL,
+        Modify_Fee      MONEY         NULL,
+        Request_No      VARCHAR(40)   NULL,
+        Source          VARCHAR(20)   NULL,
+        Op_User         VARCHAR(20)   NOT NULL,
+        Op_Time         DATETIME      NOT NULL CONSTRAINT DF_BS_CardLog_Time DEFAULT (GETDATE()),
+        Client_IP       VARCHAR(50)   NULL,
+        Remark          VARCHAR(200)  NULL,
+        Ext1            VARCHAR(100)  NULL,
+        Ext2            VARCHAR(100)  NULL,
+        CONSTRAINT PK_BS_CardLog PRIMARY KEY CLUSTERED (ID_KEY ASC)
+    );
+GO
+
+/*---------- 15.2 索引补充 ----------*/
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_CardLog_Person' AND object_id = OBJECT_ID('dbo.BS_CardLog'))
+    CREATE INDEX IX_BS_CardLog_Person ON dbo.BS_CardLog (Person_ID ASC, Op_Time DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_CardLog_Type' AND object_id = OBJECT_ID('dbo.BS_CardLog'))
+    CREATE INDEX IX_BS_CardLog_Type ON dbo.BS_CardLog (Op_Type ASC, Op_Time DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_CardLog_Request' AND object_id = OBJECT_ID('dbo.BS_CardLog'))
+    CREATE UNIQUE INDEX IX_BS_CardLog_Request ON dbo.BS_CardLog (Request_No) WHERE Request_No IS NOT NULL;
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_CardLog_CardNo' AND object_id = OBJECT_ID('dbo.BS_CardLog'))
+    CREATE INDEX IX_BS_CardLog_CardNo ON dbo.BS_CardLog (Card_No);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BS_CardExt_CardNo' AND object_id = OBJECT_ID('dbo.BS_CardExt'))
+    CREATE INDEX IX_BS_CardExt_CardNo ON dbo.BS_CardExt (Card_No);
+GO
+
+/* CS 既有表上的索引属于只增操作，不改变 CS 的读写语义 */
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_ST_LockCard_Person_Date' AND object_id = OBJECT_ID('dbo.ST_LockCard'))
+    CREATE INDEX IX_ST_LockCard_Person_Date ON dbo.ST_LockCard (Person_ID ASC, Lock_Date DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_ST_UnLockCard_Person_Date' AND object_id = OBJECT_ID('dbo.ST_UnLockCard'))
+    CREATE INDEX IX_ST_UnLockCard_Person_Date ON dbo.ST_UnLockCard (Person_ID ASC, UnLock_Date DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_ST_AlterCard_Person_Date' AND object_id = OBJECT_ID('dbo.ST_AlterCard'))
+    CREATE INDEX IX_ST_AlterCard_Person_Date ON dbo.ST_AlterCard (Person_ID ASC, Alter_Date DESC);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_ST_DeleteCard_Person_Date' AND object_id = OBJECT_ID('dbo.ST_DeleteCard'))
+    CREATE INDEX IX_ST_DeleteCard_Person_Date ON dbo.ST_DeleteCard (Person_ID ASC, Del_Date DESC);
+GO
+
+/*---------- 15.3 卡务中心-账户与卡 菜单 ----------*/
+DECLARE @CardAcctPages TABLE (
+    Menu_ID INT NOT NULL,
+    Menu_No VARCHAR(20) NOT NULL,
+    Menu_Name NVARCHAR(20) NOT NULL,
+    Form_Name VARCHAR(50) NOT NULL,
+    Menu_Index TINYINT NOT NULL
+);
+INSERT INTO @CardAcctPages (Menu_ID, Menu_No, Menu_Name, Form_Name, Menu_Index) VALUES
+    (910201, 'BS_CARD_ACCOUNT',     N'账户信息设置',   '/card/account',      1),
+    (910202, 'BS_CARD_ACCOUNTTYPE', N'账户类别设置',   '/card/account-type', 2),
+    (910203, 'BS_CARD_OPEN',        N'开户与销户',     '/card/account-open', 3),
+    (910204, 'BS_CARD_FREEZE',      N'账户冻结与解冻', '/card/freeze',       4),
+    (910205, 'BS_CARD_CHANGE',      N'换卡与补卡',     '/card/card-change',  5),
+    (910206, 'BS_CARD_LOSS',        N'卡挂失与解挂',   '/card/card-loss',    6),
+    (910207, 'BS_CARD_IDIMPORT',    N'导入授权 ID 卡', '/card/card-import',  7),
+    (910208, 'BS_CARD_PERSONAL',    N'个人账户',       '/card/personal',     8);
+
+INSERT INTO dbo.ST_MenuInfo (Menu_ID, System_No, Menu_No, Menu_Name, Para_ID, Call_Mode, Form_Name, Menu_Index)
+SELECT p.Menu_ID, 'BS', p.Menu_No, p.Menu_Name, 9001, 1, p.Form_Name, p.Menu_Index
+  FROM @CardAcctPages p
+ WHERE NOT EXISTS (SELECT 1 FROM dbo.ST_MenuInfo m WHERE m.Menu_ID = p.Menu_ID);
+GO
+
+/*---------- 15.4 权限位与权限码映射 ----------*/
+DECLARE @CardAcctRights TABLE (
+    Menu_ID INT NOT NULL,
+    Right_ID CHAR(1) NOT NULL,
+    Right_Name NVARCHAR(20) NOT NULL,
+    Permission_Code VARCHAR(64) NOT NULL,
+    Sort_No TINYINT NOT NULL
+);
+INSERT INTO @CardAcctRights (Menu_ID, Right_ID, Right_Name, Permission_Code, Sort_No) VALUES
+    (910201, '0', N'查看',     'card:account:view',          1),
+    (910201, '1', N'保存',     'card:account:update',        2),
+    (910202, '0', N'查看',     'card:accountType:view',      1),
+    (910202, '1', N'新增',     'card:accountType:create',    2),
+    (910202, '2', N'修改',     'card:accountType:update',    3),
+    (910202, '3', N'停用',     'card:accountType:delete',    4),
+    (910203, '0', N'查看',     'card:accountOpen:view',      1),
+    (910203, '1', N'开户',     'card:accountOpen:open',      2),
+    (910203, '2', N'修改卡',   'card:accountOpen:update',    3),
+    (910203, '3', N'销户',     'card:accountOpen:close',     4),
+    (910203, '4', N'销户复核', 'card:accountOpen:closeConfirm', 5),
+    (910204, '0', N'查看',     'card:freeze:view',           1),
+    (910204, '1', N'冻结',     'card:freeze:freeze',         2),
+    (910204, '2', N'解冻',     'card:freeze:unfreeze',       3),
+    (910205, '0', N'查看',     'card:cardChange:view',       1),
+    (910205, '1', N'换卡补卡', 'card:cardChange:change',     2),
+    (910206, '0', N'查看',     'card:cardLoss:view',         1),
+    (910206, '1', N'挂失',     'card:cardLoss:loss',         2),
+    (910206, '2', N'解挂',     'card:cardLoss:unloss',       3),
+    (910207, '0', N'查看',     'card:cardImport:view',       1),
+    (910207, '1', N'导入',     'card:cardImport:import',     2),
+    (910207, '2', N'删除',     'card:cardImport:delete',     3),
+    (910208, '0', N'查看',     'card:personal:view',         1),
+    (910208, '1', N'改密',     'card:personal:changePwd',    2),
+    (910208, '2', N'导出',     'card:personal:export',       3);
+
+DECLARE @AcctMenuId INT, @AcctMenuNo VARCHAR(20);
+DECLARE @AcctRightId CHAR(1), @AcctRightName NVARCHAR(20), @AcctCode VARCHAR(64);
+
+DECLARE acct_right_cursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT Menu_ID, Right_ID, Right_Name, Permission_Code FROM @CardAcctRights ORDER BY Menu_ID, Sort_No;
+OPEN acct_right_cursor;
+FETCH NEXT FROM acct_right_cursor INTO @AcctMenuId, @AcctRightId, @AcctRightName, @AcctCode;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    SELECT @AcctMenuNo = Menu_No FROM dbo.ST_MenuInfo WHERE Menu_ID = @AcctMenuId;
+
+    IF @AcctMenuNo IS NOT NULL
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM dbo.ST_RightValue WHERE Right_ID = @AcctRightId AND Form_Name = @AcctMenuNo)
+            INSERT INTO dbo.ST_RightValue (Right_ID, Form_Name, Right_Name)
+            VALUES (@AcctRightId, @AcctMenuNo, @AcctRightName);
+
+        IF NOT EXISTS (SELECT 1 FROM dbo.BS_RightCodeMap WHERE Menu_ID = @AcctMenuId AND Right_ID = @AcctRightId)
+            INSERT INTO dbo.BS_RightCodeMap (Menu_ID, Right_ID, Permission_Code, Api_Route, Remark)
+            VALUES (@AcctMenuId, @AcctRightId, @AcctCode, NULL, N'BS卡务中心账户与卡权限码');
+    END
+
+    FETCH NEXT FROM acct_right_cursor INTO @AcctMenuId, @AcctRightId, @AcctRightName, @AcctCode;
+END
+CLOSE acct_right_cursor;
+DEALLOCATE acct_right_cursor;
+
+/* 汇总每个菜单的权限位字符串 */
+UPDATE ri
+   SET ri.Right_Values = x.Rights
+  FROM dbo.ST_RightInfo ri
+  JOIN (
+        SELECT Menu_ID, STUFF((SELECT '' + r.Right_ID
+                                 FROM @CardAcctRights r
+                                WHERE r.Menu_ID = c.Menu_ID
+                                ORDER BY r.Right_ID
+                                FOR XML PATH('')), 1, 0, '') AS Rights
+          FROM @CardAcctRights c
+         GROUP BY c.Menu_ID
+       ) x ON x.Menu_ID = ri.Menu_ID;
+
+INSERT INTO dbo.ST_RightInfo (Menu_ID, Form_Name, Right_Values, Remark)
+SELECT x.Menu_ID, m.Menu_No, x.Rights, N'BS卡务中心账户与卡权限位'
+  FROM (
+        SELECT Menu_ID, STUFF((SELECT '' + r.Right_ID
+                                 FROM @CardAcctRights r
+                                WHERE r.Menu_ID = c.Menu_ID
+                                ORDER BY r.Right_ID
+                                FOR XML PATH('')), 1, 0, '') AS Rights
+          FROM @CardAcctRights c
+         GROUP BY c.Menu_ID
+       ) x
+  JOIN dbo.ST_MenuInfo m ON m.Menu_ID = x.Menu_ID
+ WHERE NOT EXISTS (SELECT 1 FROM dbo.ST_RightInfo ri WHERE ri.Menu_ID = x.Menu_ID);
+
+/* 管理员角色默认拥有全部账户与卡权限位 */
+UPDATE rr
+   SET rr.Right_Values = ri.Right_Values
+  FROM dbo.ST_RoleRight rr
+  JOIN dbo.ST_RightInfo ri ON ri.Menu_ID = rr.Menu_ID
+ WHERE rr.Role_No = 'Administrators'
+   AND ri.Menu_ID IN (910201, 910202, 910203, 910204, 910205, 910206, 910207, 910208)
+   AND ISNULL(rr.Right_Values, '') <> ri.Right_Values;
+
+INSERT INTO dbo.ST_RoleRight (Role_No, Menu_ID, Right_Values)
+SELECT 'Administrators', ri.Menu_ID, ri.Right_Values
+  FROM dbo.ST_RightInfo ri
+ WHERE ri.Menu_ID IN (910201, 910202, 910203, 910204, 910205, 910206, 910207, 910208)
+   AND NOT EXISTS (SELECT 1 FROM dbo.ST_RoleRight rr WHERE rr.Role_No = 'Administrators' AND rr.Menu_ID = ri.Menu_ID);
+GO
+
+/*---------- 15.5 配置项 ----------*/
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Open.SupplyRemark')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Open.SupplyRemark', N'开户充值', N'开户时写入 ST_SupplyFund.Remark 的固定文案，与 CS 保持可配置一致');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Change.BlackRemark')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Change.BlackRemark', N'换卡产生', N'换卡后旧卡号写入 ST_BlackPerson 的备注');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Close.BlackRemark')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Close.BlackRemark', N'销卡产生', N'销户后卡号写入 ST_BlackPerson 的备注');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.PwdVerify.Mode')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.PwdVerify.Mode', 'Card', N'卡密码校验模式：Card 必须校验卡密码；Manager 仅需复核码；Both 二者其一');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Pwd.SyncCard')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Pwd.SyncCard', '1', N'改密是否必须写卡成功后才写库：1 必须、0 允许仅写库（标注卡内未同步）');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Pwd.AllowView')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Pwd.AllowView', '0', N'是否允许查看卡密码明文：1 允许（需复核码并写审计）、0 关闭');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Pwd.MaxFail')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Pwd.MaxFail', '5', N'卡密码连续失败锁定阈值，达到后锁定 Card.Pwd.LockMinutes 分钟');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Pwd.LockMinutes')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Pwd.LockMinutes', '10', N'卡密码失败锁定时长（分钟），仅影响 BS 操作');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Loss.RemindDays')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Loss.RemindDays', '30', N'挂失超过该天数进入长期挂失清单');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Loss.AutoCloseDays')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Loss.AutoCloseDays', '0', N'超期挂失转入建议销户清单的天数，0 表示不处理');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Close.CheckInflight')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Close.CheckInflight', '1', N'销户是否校验在途交易：1 校验、0 关闭');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Open.CheckBlacklist')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Open.CheckBlacklist', '1', N'开户是否校验卡号黑名单：1 命中时提示二次确认、0 不校验');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'SuperPwd.Enabled')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('SuperPwd.Enabled', '1', N'是否启用 CS 超级密码（ST_ONECARD 或 Admin 密码）校验');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.Freeze.BatchLimit')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.Freeze.BatchLimit', '200', N'批量冻结单次上限（条）');
+IF NOT EXISTS (SELECT 1 FROM dbo.BS_SysConfig WHERE Config_Key = 'Card.IdCard.BatchDeleteLimit')
+    INSERT INTO dbo.BS_SysConfig (Config_Key, Config_Value, Remark)
+    VALUES ('Card.IdCard.BatchDeleteLimit', '100', N'授权 ID 卡批量删除单次上限（条）');
+GO

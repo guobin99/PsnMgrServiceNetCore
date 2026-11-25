@@ -10,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 // static config for AliyunSmsService / MobileMessageService
 PsnMgrService.Services.AppConfig.Init(builder.Configuration);
 
-//ÊÚÈ¨ 1. ¶ÁÈ¡ JWT ÅäÖÃ
+//æˆæƒ 1. è¯»å– JWT é…ç½®
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
 
-//ÊÚÈ¨ 2. Ìí¼ÓÈÏÖ¤·şÎñ
+//æˆæƒ 2. æ·»åŠ è®¤è¯æœåŠ¡
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -31,40 +31,69 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(secretKey),
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero   // ¿ÉÑ¡£ºÔÊĞíµÄÊ±¼äÆ«ÒÆ£¬Ä¬ÈÏ5·ÖÖÓ£¬ÕâÀïÉèÎª0±íÊ¾ÑÏ¸ñĞ£Ñé
+        ClockSkew = TimeSpan.Zero   // å¯é€‰ï¼šå…è®¸çš„æ—¶é—´åç§»ï¼Œé»˜è®¤5åˆ†é’Ÿï¼Œè¿™é‡Œè®¾ä¸º0è¡¨ç¤ºä¸¥æ ¼æ ¡éªŒ
+    };
+    //ä»¤ç‰ŒåŠé”€æ ¡éªŒï¼šæ¯æ¬¡è¯·æ±‚æ ¡éªŒ BS_AuthToken ç™½åå•ï¼Œæ³¨é”€/æ”¹å¯†åç«‹å³å¤±æ•ˆ
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var tokenId = context.Principal?.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti)?.Value;
+            if (string.IsNullOrWhiteSpace(tokenId)) return;
+
+            var dbContext = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+            var token = await dbContext.BS_AuthTokens
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Token_ID == tokenId);
+
+            if (token == null || token.Revoked)
+            {
+                context.Fail("ä»¤ç‰Œå·²æ³¨é”€æˆ–ä¸å­˜åœ¨");
+            }
+        }
     };
 });
 
-//ÊÚÈ¨ 3. Ìí¼ÓÊÚÈ¨·şÎñ£¨Èç¹ûĞèÒª¸üÏ¸Á£¶ÈµÄ¿ØÖÆ£©
+//æˆæƒ 3. æ·»åŠ æˆæƒæœåŠ¡ï¼ˆå¦‚æœéœ€è¦æ›´ç»†ç²’åº¦çš„æ§åˆ¶ï¼‰
 builder.Services.AddAuthorization();
 
-// ÈÕÖ¾1. ÅäÖÃ Serilog
+// æ—¥å¿—1. é…ç½® Serilog
 Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)          // ¿ÉÑ¡£º´Ó appsettings.json ¶ÁÈ¡ÅäÖÃ
-    .Enrich.FromLogContext()                               // ·á¸»ÈÕÖ¾ÉÏÏÂÎÄ£¨ÈçÇëÇóÂ·¾¶¡¢ÓÃ»§µÈ£©
+    .ReadFrom.Configuration(builder.Configuration)          // å¯é€‰ï¼šä» appsettings.json è¯»å–é…ç½®
+    .Enrich.FromLogContext()                               // ä¸°å¯Œæ—¥å¿—ä¸Šä¸‹æ–‡ï¼ˆå¦‚è¯·æ±‚è·¯å¾„ã€ç”¨æˆ·ç­‰ï¼‰
     .WriteTo.File(
-        path: "Logs/log-.txt",                             // ÈÕÖ¾ÎÄ¼şÂ·¾¶£¬Ö§³ÖÈÕÆÚÕ¼Î»·û
-        rollingInterval: RollingInterval.Hour,              // Ã¿Ìì¹ö¶¯Ò»¸öĞÂÎÄ¼ş
-        retainedFileCountLimit: 31*24,                        // ±£Áô×î½ü31¸öÎÄ¼ş
+        path: "Logs/log-.txt",                             // æ—¥å¿—æ–‡ä»¶è·¯å¾„ï¼Œæ”¯æŒæ—¥æœŸå ä½ç¬¦
+        rollingInterval: RollingInterval.Hour,              // æ¯å¤©æ»šåŠ¨ä¸€ä¸ªæ–°æ–‡ä»¶
+        retainedFileCountLimit: 31*24,                        // ä¿ç•™æœ€è¿‘31ä¸ªæ–‡ä»¶
         outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
     )
     .CreateLogger();
 
-//ÈÕÖ¾2. ÓÃ Serilog Ìæ»»ÄÚÖÃÈÕÖ¾ÏµÍ³
+//æ—¥å¿—2. ç”¨ Serilog æ›¿æ¢å†…ç½®æ—¥å¿—ç³»ç»Ÿ
 builder.Host.UseSerilog();
 
 
 // Add services to the container.
 
-// Ìí¼ÓÊı¾İ¿âÉÏÏÂÎÄ
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// æ·»åŠ æ•°æ®åº“ä¸Šä¸‹æ–‡
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    sql => sql.UseCompatibilityLevel(90))); // å…¼å®¹ SQL Server 2008ï¼ˆOPENJSON éœ€ 2016+ï¼Œçº§åˆ« 90 èµ° IN å¸¸é‡ï¼›åˆ†é¡µå·²æ”¹å†…å­˜åˆ†é¡µï¼‰
 //builder.Services.AddDbContext<AppDbContext>(opt =>opt.UseInMemoryDatabase("TodoList"));
-// 1. ¶¨Òå CORS ²ßÂÔ
+
+// ç»„ç»‡ä¸æƒé™ï¼šæƒé™ç ç¼“å­˜ï¼ˆå†™åè‡ªå¢ç‰ˆæœ¬ + çŸ­ TTL å…œåº•ï¼‰ä¸å®¡è®¡æœåŠ¡
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<PsnMgrService.Services.PermissionService>();
+builder.Services.AddScoped<PsnMgrService.Services.AuditService>();
+
+// åŒæ­¥ä»»åŠ¡æ‰§è¡Œå™¨ï¼šè½®è¯¢ BS_SyncLog çš„å¾…æ‰§è¡Œè®°å½•å¹¶çœŸæ­£æ‰§è¡Œï¼ˆå¯ç”¨ Sync:RunnerEnabled å…³é—­ï¼‰
+builder.Services.AddHostedService<PsnMgrService.Services.SyncTaskRunner>();
+// 1. å®šä¹‰ CORS ç­–ç•¥
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.AllowAnyOrigin()//ÔÊĞíÈÎÒâÓòÃû//WithOrigins("https://frontend.example.com", "https://localhost:3000") // Ìæ»»ÎªÄãµÄÇ°¶ËµØÖ·
+        policy.AllowAnyOrigin()//å…è®¸ä»»æ„åŸŸå//WithOrigins("https://frontend.example.com", "https://localhost:3000") // æ›¿æ¢ä¸ºä½ çš„å‰ç«¯åœ°å€
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -72,22 +101,22 @@ builder.Services.AddCors(options =>
 
 //builder.Services.ConfigureHttpJsonOptions(options =>
 //{
-//    options.SerializerOptions.PropertyNamingPolicy = null; // ±£³ÖÔ­Ê¼Ãû³Æ,by default is PascalCase¡£·ÀÖ¹ÍÕ·åÊ½ÃüÃû£¨Dept_Id±ä³Édept_Id£©
+//    options.SerializerOptions.PropertyNamingPolicy = null; // ä¿æŒåŸå§‹åç§°,by default is PascalCaseã€‚é˜²æ­¢é©¼å³°å¼å‘½åï¼ˆDept_Idå˜æˆdept_Idï¼‰
 //});
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;// ±£³ÖÔ­Ê¼Ãû³Æ,by default is PascalCase¡£·ÀÖ¹ÍÕ·åÊ½ÃüÃû£¨Dept_Id±ä³Édept_Id£©
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;// ä¿æŒåŸå§‹åç§°,by default is PascalCaseã€‚é˜²æ­¢é©¼å³°å¼å‘½åï¼ˆDept_Idå˜æˆdept_Idï¼‰
 }); 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-//ÈÕÖ¾3.×Ô¶¯¼ÇÂ¼Ã¿¸ö HTTP ÇëÇóµÄ URL¡¢·½·¨¡¢ÏìÓ¦×´Ì¬Âë¡¢ºÄÊ±£¬¿ÉÒÔÊ¹ÓÃ Serilog Ìá¹©µÄ ÇëÇóÈÕÖ¾ÖĞ¼ä¼ş¡£
+//æ—¥å¿—3.è‡ªåŠ¨è®°å½•æ¯ä¸ª HTTP è¯·æ±‚çš„ URLã€æ–¹æ³•ã€å“åº”çŠ¶æ€ç ã€è€—æ—¶ï¼Œå¯ä»¥ä½¿ç”¨ Serilog æä¾›çš„ è¯·æ±‚æ—¥å¿—ä¸­é—´ä»¶ã€‚
 //app.UseSerilogRequestLogging(options =>
 //{
-//options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ÏìÓ¦ {StatusCode} ºÄÊ± {Elapsed:0.0000} ms";
+//options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ï¿½ï¿½Ó¦ {StatusCode} ï¿½ï¿½Ê± {Elapsed:0.0000} ms";
 //});
 
 // Configure the HTTP request pipeline.
@@ -96,11 +125,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseCors("AllowSpecificOrigins");
-//ÊÚÈ¨  4. Ê¹ÓÃÈÏÖ¤ºÍÊÚÈ¨ÖĞ¼ä¼ş£¨Ë³ĞòºÜÖØÒª£ºÈÏÖ¤ -> ÊÚÈ¨ -> ¿ØÖÆÆ÷Ó³Éä£©
+//æˆæƒ  4. ä½¿ç”¨è®¤è¯å’Œæˆæƒä¸­é—´ä»¶ï¼ˆé¡ºåºå¾ˆé‡è¦ï¼šè®¤è¯ -> æˆæƒ -> æ§åˆ¶å™¨æ˜ å°„ï¼‰
 app.UseAuthentication();
-//ÊÚÈ¨  5. Ä¬ÈÏÒªÇóËùÓĞ¶Ëµã¶¼ĞèÒªÈÏÖ¤
+//æˆæƒ  5. é»˜è®¤è¦æ±‚æ‰€æœ‰ç«¯ç‚¹éƒ½éœ€è¦è®¤è¯
 app.UseAuthorization();
-//ÊÚÈ¨  5. ½«µÇÂ¼¡¢×¢²áµÈ¶ËµãÉèÖÃÎªÔÊĞíÄäÃû·ÃÎÊ
+//æˆæƒ  5. å°†ç™»å½•ã€æ³¨å†Œç­‰ç«¯ç‚¹è®¾ç½®ä¸ºå…è®¸åŒ¿åè®¿é—®
 //app.MapGet("/auth/login", () => "Hello World!").AllowAnonymous();
 
 

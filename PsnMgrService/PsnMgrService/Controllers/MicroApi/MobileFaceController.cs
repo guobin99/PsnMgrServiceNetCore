@@ -18,8 +18,7 @@ namespace PsnMgrService.Controllers.MicroApi;
 [Route("api/m")]
 public class MobileFaceController : ControllerBase
 {
-    /// <summary>人脸照片上限：80K（81920 字节）</summary>
-    private const int FacePhotoMaxBytes = 80 * 1024;
+    // 压缩与自动审核逻辑统一在 FaceAutoReview，与卡务中心人脸照片库共用同一口径。
 
     private readonly AppDbContext _db;
     private readonly ILogger<MobileFaceController> _logger;
@@ -141,146 +140,13 @@ public class MobileFaceController : ControllerBase
 
     /// <summary>
     /// 自动审核：过小/无法解析/分辨率低/过暗过曝/内容空白/未检测到人脸/人脸朝向不合格 直接驳回。
-    /// 人脸与姿态判定使用移植过来的 PicoDetector（pico 级联，与 H5/小程序同一套参数与阈值）。
+    /// 具体实现统一在 FaceAutoReview，与卡务中心照片库上传/导入共用一套规则。
     /// </summary>
-    private bool FaceReview(byte[] img, out string reason)
-    {
-        reason = "";
-        if (img == null || img.Length < 2 * 1024) { reason = "照片过小或不是有效图片"; return false; }
-        try
-        {
-            using var ms = new MemoryStream(img);
-            using var bmp = new Bitmap(ms);
-            if (bmp.Width < 200 || bmp.Height < 200) { reason = "分辨率过低（需≥200×200）"; return false; }
+    private static bool FaceReview(byte[] img, out string reason) => FaceAutoReview.Review(img, out reason);
 
-            using (var small = new Bitmap(bmp, 32, 32))
-            {
-                double sum = 0;
-                var vals = new double[1024];
-                int i = 0;
-                for (int y = 0; y < 32; y++)
-                    for (int x = 0; x < 32; x++)
-                    {
-                        double v = small.GetPixel(x, y).GetBrightness();
-                        vals[i++] = v; sum += v;
-                    }
-                double avg = sum / 1024, sq = 0;
-                foreach (var v in vals) sq += (v - avg) * (v - avg);
-                double std = Math.Sqrt(sq / 1024);
-                if (avg < 0.15 || avg > 0.92) { reason = "光线过暗或过曝，请重新拍摄"; return false; }
-                if (std < 0.02) { reason = "照片内容无效（可能为空白/纯色图）"; return false; }
-            }
+    /// <summary>压缩到 80K 以下：具体实现统一在 FaceAutoReview。</summary>
+    private static byte[] CompressUnder80K(byte[] raw) => FaceAutoReview.CompressUnder80K(raw);
 
-            // 核心判定：照片中必须能检测到人脸（pico 级联，与 H5/小程序端同一套参数）。
-            // 姿态判定把图按候选朝向旋转后复检：任一朝向检出即视为「有人脸」；
-            // 若最优朝向不是 0°（横向 ±90° / 倒置 180° / 偏转超过 20°）则驳回。
-            var pose = PicoDetector.Pose(bmp);
-            if (!PicoDetector.HasFace(bmp) && !pose.Detected)
-            {
-                reason = "未检测到人脸，请确保面部正对镜头、光线充足、无遮挡后重新拍摄";
-                return false;
-            }
-            if (pose.Detected && !pose.Ok)
-            {
-                reason = pose.Pose == "sideways"
-                    ? PicoDetector.PoseReasonSideways
-                    : pose.Pose == "upside-down"
-                        ? PicoDetector.PoseReasonUpsideDown
-                        : PicoDetector.PoseReasonTilted;
-                return false;
-            }
-        }
-        catch { reason = "无法解析图片，请上传JPG/PNG格式"; return false; }
-        return true;
-    }
-
-    /// <summary>
-    /// 压缩到 80K 以下：先按长边逐级缩小，再逐级降低 JPEG 质量，直至体积达标。
-    /// </summary>
-    private static byte[] CompressUnder80K(byte[] raw)
-    {
-        if (raw == null || raw.Length == 0) return raw!;
-        if (raw.Length <= FacePhotoMaxBytes && IsJpeg(raw)) return raw;
-        try
-        {
-            using var ms = new MemoryStream(raw);
-            using var bmp = new Bitmap(ms);
-            ApplyExifOrientation(bmp);   // 关键：先把方向应用到像素
-
-            int[] longSides = { 1080, 720, 480, 320, 240 };
-            foreach (int side in longSides)
-            {
-                byte[] c = EncodeJpegScaled(bmp, side, 80);
-                if (c != null && c.Length < FacePhotoMaxBytes) return c;
-            }
-            int[] qualities = { 90, 80, 70, 60, 50, 40, 30, 20 };
-            foreach (int q in qualities)
-            {
-                byte[] c = EncodeJpegScaled(bmp, 480, q);
-                if (c != null && c.Length < FacePhotoMaxBytes) return c;
-            }
-            return EncodeJpegScaled(bmp, 240, 15) ?? raw;
-        }
-        catch { return raw; }
-    }
-
-    /// <summary>是否 JPEG（FF D8 FF），未超限的 JPEG 可直接沿用、避免无谓二次压缩</summary>
-    private static bool IsJpeg(byte[] raw)
-        => raw != null && raw.Length > 3 && raw[0] == 0xFF && raw[1] == 0xD8 && raw[2] == 0xFF;
-
-    /// <summary>按长边上限等比缩放并编码 JPEG（质量为 1-100）</summary>
-    private static byte[]? EncodeJpegScaled(Bitmap src, int maxLongSide, long quality)
-    {
-        int longSide = Math.Max(src.Width, src.Height);
-        double scale = longSide > maxLongSide ? (double)maxLongSide / longSide : 1.0;
-        int nw = Math.Max(1, (int)Math.Round(src.Width * scale));
-        int nh = Math.Max(1, (int)Math.Round(src.Height * scale));
-
-        using var bmp = new Bitmap(nw, nh);
-        using (var g = Graphics.FromImage(bmp))
-        {
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.Clear(Color.White);   // 透明底转白底，避免 JPEG 黑块
-            g.DrawImage(src, 0, 0, nw, nh);
-        }
-
-        var codec = ImageCodecInfo.GetImageEncoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
-        using var outMs = new MemoryStream();
-        if (codec != null)
-        {
-            using var ep = new EncoderParameters(1);
-            ep.Param[0] = new EncoderParameter(Encoder.Quality, quality);
-            bmp.Save(outMs, codec, ep);
-        }
-        else
-        {
-            bmp.Save(outMs, ImageFormat.Jpeg);
-        }
-        return outMs.ToArray();
-    }
-
-    private static void ApplyExifOrientation(Bitmap bmp)
-    {
-        const int OrientationId = 0x0112;
-        if (!bmp.PropertyIdList.Contains(OrientationId)) return;
-
-        var prop = bmp.GetPropertyItem(OrientationId);
-        if (prop?.Value == null || prop.Value.Length < 2) return;
-
-        int orientation = BitConverter.ToUInt16(prop.Value, 0);
-        switch (orientation)
-        {
-            case 2: bmp.RotateFlip(RotateFlipType.RotateNoneFlipX); break;
-            case 3: bmp.RotateFlip(RotateFlipType.Rotate180FlipNone); break;
-            case 4: bmp.RotateFlip(RotateFlipType.RotateNoneFlipY); break;
-            case 5: bmp.RotateFlip(RotateFlipType.Rotate90FlipX); break;
-            case 6: bmp.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-            case 7: bmp.RotateFlip(RotateFlipType.Rotate270FlipX); break;
-            case 8: bmp.RotateFlip(RotateFlipType.Rotate270FlipNone); break;
-        }
-
-        try { bmp.RemovePropertyItem(OrientationId); } catch { /* 忽略 */ }
-    }
 
     /// <summary>人脸采集状态：按 ST_PersonPhoto 是否有记录判定（有记录即已通过），照片以 dataURL 返回便于直接展示</summary>
     [Authorize]
